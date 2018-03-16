@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Home</title>
+		<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="js/jquery.min.js"></script>
+		 <!-- Custom Theme files -->
+		<link href="css/style.css" rel='stylesheet' type='text/css' />
+   		 <!-- Custom Theme files -->
+   		  <!---- start-smoth-scrolling---->
+		<script type="text/javascript" src="js/move-top.js"></script>
+		<script type="text/javascript" src="js/easing.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+		 <!---- start-smoth-scrolling---->
+		 <meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		</script>
+		<!-- webfonts -->
+		<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
+		<!-- webfonts -->
+	</head>
+	<body>
+		<!-- container -->
+			<!-- header -->
+			<div id="totop" class="header">
+				<div class="container">
+				<!-- menu -->
+				<div class="menu">
+					<span class="menu-icon"> </span>
+					<ul>
+						<li><a href="#home" class="scroll">Home</a></li>
+						<li><a href="projects.html">Projects</a></li>
+						<li><a href="publication.html">Publication</a></li>
+						<li><a href="people.html">People</a></li>
+						<li><a href="contact.html">Contact</a></li>
+						<div class="clearfix"> </div>
+					</ul>
+				</div>
+				<!-- /menu -->
+				<!-- script-for-menu -->
+				<script>
+					$(document).ready(function(){
+						$(".menu ul").hide();
+						$("span.menu-icon").click(function(){
+							$(".menu ul").slideToggle(500);
+						});
+						
+					});
+				</script>
+				<!-- /script-for-menu -->
+				<!-- header-info -->
+				<div class="header-info text-center">
+					<h2>We've got the special power</h2>
+					<span> </span>
+					<h1>Hunter</h1>
+					<a href="#intro"  class="scroll"><label class="downarrow"> </label></a>
+				</div>
+				<!-- /header-info -->
+			</div>
+			<!-- /header -->
+			</div>
+			<!-- intro -->
+			<div id="intro" class="intro text-center">
+				<div class="container">
+					<!-- head-section -->
+					<div class="head-section text-center">
+						<h2>Meet us</h2>
+						<span> </span>
+					</div>
+					<!-- /head-section -->
+					<p>what we do blabla</p>
+					<a href="#services"  class="scroll"><label class="downarrow1"> </label></a>
+				</div>
+			</div>
+			<!-- intro -->
+			
+					<!-- contact-grids -->
+				</div>
+			</div>
+			<!-- contact -->
+			<!-- footer -->
+			<div class="footer">
+				<div class="container"> 
+					
+					<div class="footer-right">
+						<p><a href="#totop" class="scroll">Back to top<span> </span></a></p>
+						<script type="text/javascript">
+									$(document).ready(function() {
+									
+										
+										$().UItoTop({ easingType: 'easeOutQuart' });
+										
+									});
+								</script>
+									<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+					</div>
+				</div>
+			</div>
+			<!-- footer -->
+		<!-- /container -->
+	</body>
+</html>
+
