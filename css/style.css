@@ -12,9 +12,9 @@ body a{
 }
 /*-- header --*/
 .header{
-	background:url(../images/2.jpg) no-repeat 0px 0px;
+	background:#282f35;
 	background-size:cover;
-	min-height:750px;
+	min-height:350px;
 	position:relative;
 }
 .menu{
