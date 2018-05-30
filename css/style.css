@@ -14,7 +14,7 @@ body a{
 .header{
 	background:#282f35;
 	background-size:cover;
-	min-height:350px;
+	min-height:120px;
 	position:relative;
 }
 .menu{
