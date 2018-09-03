@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="decription" content="SignIn">
+	<meta name="author" content="liuyingying">
+	<title>SignIn</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/css/signin.css">
+
+</head>
+<body>
+	<div class="container text-center">
+		<form class="form-signin col-centered" action="/signin/" method="POST" role="form">
+			<h2 class="form-signin-heading">Sign In</h2>
+			<input name="username" type="text" class="form-control" placeholder="Name" required autofocus>
+			<input name="password" type="password" class="form-control" placeholder="Password" required>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+            <p style="color:red">{{ login_error }}</p>
+		</form>
+	</div>
+
+	<script src="../static/bootstrap-4.0.0/assets/js/vendor/jquery-slim.min.js"></script>
+	<script src="../static/bootstrap-4.0.0/assets/js/vendor/popper.min.js"></script>
+	<script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+	<script src="../static/bootstrap-4.0.0/assets/js/vendor/holder.min.js"></script>
+</body>
+</html>

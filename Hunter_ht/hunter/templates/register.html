@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+    <form method="POST" action="/register/" enctype="multipart/form-data">
+        <input name="username" type="text" class="form-control" placeholder="Name" required autofocus>
+        <input name="password" type="password" class="form-control" placeholder="Password" required>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">添加用户</button>
+        <p style="color:red">{{ message }}</p>
+    </form>
+</body>
+</html>
