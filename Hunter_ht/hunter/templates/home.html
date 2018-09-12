@@ -34,15 +34,15 @@
         		</li>
         		<li>
         			<!-- <input type="radio" name="radio-set" id="nav-Products"> -->
-        			<a href="#">Project</a>
+        			<a href="#">Projects</a>
         		</li>
         		<li>
         			<!-- <input type="radio" name="radio-set" id="nav-Publication"> -->
-        			<a href="#">Publication</a>
+        			<a href="#">Publications</a>
         		</li>
         		<li>
         			<!-- <input type="radio" name="radio-set" id="nav-Articles"> -->
-        			<a href="#">Article</a>
+        			<a href="#">Articles</a>
         		</li>
 
         	</ul>
@@ -65,17 +65,17 @@
 		      <p>Email Address: hunter_ht@outlook.com</p>
 		    </div>
      	</section>
-     	<section id="Project">
+     	<section id="Projects">
      		<div class="section position-relative overflow-hidden text-center bg-light">
-		      <h1>project</h1>
+		      <h1>Projects</h1>
 		      <span></span>
 		    </div>
 		    <div>
 		    	 <div class="viewAll" class="about-grid">
 						<div class="viewItem col-md-3 col-sm-6 col-xs-6 text-center">
 							<div class="about-grid-info">
-								<span class="projIcon icon-1"></span>
-								<h4><a href="https://github.com/hunter-ht-2018/ptfuzzer">PTFUZZER</a></h4>
+                                <a href="https://github.com/hunter-ht-2018/ptfuzzer" target="_blank"><span class="projIcon icon-1"></span></a>
+								<h4><a href="https://github.com/hunter-ht-2018/ptfuzzer" target="_blank">PTFUZZER</a></h4>
 								
 							</div>
 							<div class="item about-grid-caption">
@@ -84,8 +84,8 @@
 						</div>
 						<div class="viewItem col-md-3 col-sm-6 col-xs-6 about-grid text-center">
 							<div class="about-grid-info">
-								<span class="projIcon icon-2"></span>
-								<h4><a href="https://github.com/hunter-ht-2018/qse-ht">QSE-HT</a></h4>
+                                <a href="https://github.com/hunter-ht-2018/qse-ht" target="_blank"><span class="projIcon icon-2"></span></a>
+								<h4><a href="https://github.com/hunter-ht-2018/qse-ht" target="_blank">QSE-HT</a></h4>
 								
 							</div>
 							<div class="item about-grid-caption">
@@ -94,8 +94,8 @@
 						</div>
 						<div class="viewItem col-md-3 col-sm-6 col-xs-6 about-grid text-center">
 							<div class="about-grid-info">
-								<span class="projIcon icon-3"></span>
-								<h4><a href="https://github.com/hunter-ht-2018/DFTinker">DFTINKER</a></h4>
+                                <a href="https://github.com/hunter-ht-2018/DFTinker" target="_blank"><span class="projIcon icon-3"></span></a>
+								<h4><a href="https://github.com/hunter-ht-2018/DFTinker" target="_blank">DFTINKER</a></h4>
 								
 							</div>
 							<div class="item about-grid-caption">
@@ -104,8 +104,8 @@
 						</div>
 						<div class="viewItem col-md-3 col-sm-6 col-xs-6 about-grid text-center">
 							<div class="about-grid-info">
-								<span class="projIcon icon-4"></span>
-								<h4><a href="https://github.com/hunter-ht-2018/binary_analysis">BINARY-ANALYSIS</a></h4>
+                                <a href="https://github.com/hunter-ht-2018/binary_analysis" target="_blank"><span class="projIcon icon-4"></span></a>
+								<h4><a href="https://github.com/hunter-ht-2018/binary_analysis" target="_blank">BINARY-ANALYSIS</a></h4>
 								
 							</div>
 							<div class="item about-grid-caption">
@@ -116,37 +116,39 @@
 					</div>
                 </div>
      	</section>
-     	<section id="Publication">
+     	<section id="Publications">
      		<div class="section position-relative overflow-hidden text-center bg-light">
-		      <h1>Publication</h1>
+		      <h1>Publications</h1>
 		      <span></span>
 		    </div>
 		    <table class="table tableList">
 		    	<thead>
-		    		<tr>
-		    			<th>Date</th>
-		    			<th>Title</th>
-		    		</tr>
+		    		
 		    	</thead>
 		    	<tbody>
+
+{#                    {%  for publication in publications  %}#}
+{#		    		<tr>#}
+{#                        <td><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></td>#}
+{#		    			<td><p>{{ publication.authors }}</p><p>{{ publication.messages }}</p></td>#}
+{#		    		</tr>#}
+{#                    {%  endfor %}#}
+                    {%  for publication in publications  %}
 		    		<tr>
-		    			<td>2018/08/20</td>
-		    			<td><a href="https://www.baidu.com" target="_blank"><h3>Title</h3></a><p>This paper was published ... mainly working on...</p></td>
+		    			<td class="col-xm-2 col-md-4">{{ publication.date }}</td>
+                        <td class="col-xm-10 col-md-6 col-md-offset-2">
+                        	<p><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></p>
+                        	<p>{{ publication.authors }}</p>
+                        	<p>{{ publication.journalname }} {{publication.index}}</p>
+                        </td>
 		    		</tr>
-		    		<tr>
-		    			<td>2018/08/08</td>
-		    			<td><a href="https://www.baidu.com" target="_blank"><h3>Title</h3></a><p>This paper was published ... mainly working on...</p></td>
-		    		</tr>
-		    		<tr>
-		    			<td></td>
-		    			<td></td>
-		    		</tr>
+                    {%  endfor %}
 		    	</tbody>
 		    </table>
      	</section>
-     	<section id="Article">
+     	<section id="Articles">
      		<div class="section position-relative overflow-hidden text-center bg-light">
-		      <h1>Article</h1>
+		      <h1>Articles</h1>
 		      <span></span>
 		    </div>
 		    <div id="list-container">
