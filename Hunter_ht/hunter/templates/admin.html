@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="decription" content="admin">
+	<meta name="author" content="liuyingying">
+    <title>Admin</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/css/admin.css">
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../static/js/jquery.form.js"></script>
+    <script src="../static/js/md5.js"></script>
+    <script src="../static/js/jsencrypt.min.js"></script>
+</head>
+<body>
+
+
+    <div class="userlist">
+        <div  class="adminForm">
+            <div id="adduserform" class="form-horizontal"  >
+                <div class="form-group">
+    {#	    		<label class="col-sm-2 control-label">Username</label>#}
+                    <div>
+                        <input name="username" class="form-control" type="text" class="form-control" placeholder="Name" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+    {#	    		<label class="col-sm-2 control-label">Password</label>#}
+                    <div>
+                        <input name="password" class="form-control" style="-webkit-text-security:disc;text-security:disc;" type="text" autocomplete="off" placeholder="Password" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <button id="submitAddUser" class="adduserbtn" >添加</button>
+                        <p style="color:red">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table tableList">
+		    	<thead>
+
+		    	</thead>
+		    	<tbody>
+                    {%  for user in users  %}
+		    		<tr>
+		    			<td class="col-xm-4 col-md-4">{{ user.name }}</td>
+                        <td class="col-xm-4 col-md-4 col-md-offset-2">
+                        	<p>{{ user.nake_name }}</p>
+                        </td>
+                        <td class="col-xm-2 col-md-2"><button class="deluserbtn" onclick="delUser(this)" style="float:right">删除</button> </td>
+		    		</tr>
+                    {%  endfor %}
+		    	</tbody>
+		    </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#submitAddUser').click(function() {
+                var data = [];
+                data['username']= $('input')[0].value;
+                data['password']= $('input')[1].value;
+                data['actiontype']='0'; //0 添加用户 1 删除用户
+                encryptSend('/operator/', data);  // Jsencrypt.do对应服务端处理地址
+            });
+        });
+
+        function delUser(thisbtn) {
+            var delname = thisbtn.parentElement.parentElement.firstElementChild.innerHTML;
+            $.ajax({
+                url: '/operator/',
+                type: 'post',
+                data:  {
+                    "delname":delname,
+                    "actiontype":'1',
+                },
+                dataType: 'json',
+                success: function (message) {
+                    alert(message["warning"]);
+                    if(message["warning"]=="删除成功"){
+                        thisbtn.parentElement.parentElement.remove();
+                    }
+                },
+            });
+        }
+        //$(function() {
+
+        //});
+        function encryptSend(url, data){
+            var enData = new Object();
+            enData["username"]=data["username"];
+            enData["password"]=hex_md5(data["password"]);
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data:  {
+                    "username":enData["username"],
+                    "password":enData["password"],
+                    "actiontype":data["actiontype"],
+                },
+                dataType: 'json',
+                success: function (message) {
+                    alert(message["warning"]);
+                    if(message["warning"]=="添加成功"){
+                            var addElement ='<tr>\n' +
+                                '\t\t    \t\t\t<td class="col-xm-4 col-md-4">'+data["username"]+'</td>\n' +
+                                '                        <td class="col-xm-4 col-md-4 col-md-offset-2">\n' +
+                                '                        \t<p>{{ user.nake_name }}</p>\n' +
+                                '                        </td>\n' +
+                                '                        <td class="col-xm-2 col-md-2"><button class="deluserbtn" onclick="delUser(this)" style="float:right">删除</button> </td>\n' +
+                                '\t\t    \t\t</tr>';
+                            $('tbody').append(addElement);
+                    }
+                },
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

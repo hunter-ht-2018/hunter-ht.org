@@ -11,6 +11,7 @@
     <script src="../static/js/jquery-1.9.1.min.js"></script>
     <script src="../static/js/jquery.form.js"></script>
     <script src="../static/js/md5.js"></script>
+    <script src="../static/js/jsencrypt.min.js"></script>
 
 </head>
 <body>
@@ -18,12 +19,49 @@
 		<form id="signinform" class="form-signin col-centered" action="/signin/" method="POST" role="form">
 			<h2 class="form-signin-heading">Sign In</h2>
 			<input name="username" type="text" class="form-control" placeholder="Name" required autofocus>
-			<input name="password" type="password" class="form-control" placeholder="Password" autocomplete="new-password" required>
-			<button class="btn btn-lg btn-primary btn-block" type="submit" onclick="postData()">登录</button>
+			<input name="password" style="-webkit-text-security:disc;text-security:disc;" type="text" autocomplete="off" class="form-control" placeholder="Password" required>
+			<button id="submit" class="btn btn-lg btn-primary btn-block" type="submit" >登录</button>
             <p style="color:red">{{ login_error }}</p>
 		</form>
 	</div>
     <script type="text/javascript">
+        $(function() {
+            $('#submit').click(function() {
+                var data = [];
+                data["username"]= $('input')[0].value;
+                data["password"]= $('input')[1].value;
+                encryptSend('/signin/', data);  // Jsencrypt.do对应服务端处理地址
+            });
+        });
+        function encryptSend(url, data){
+            //var jsencrypt = new JSEncrypt();
+            // enData用来装载加密后的数据
+            var enData = new Object();
+            // 将参数用jsencrypt加密后赋给enData
+            enData["username"]=data["username"];
+            enData["password"]=hex_md5(data["password"]);
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    "username":enData["username"],
+                    "password":enData["password"],
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data["message"]=="登录成功"){
+                        window.location.href='/index/';
+                    }else{
+                        alert(data["message"]);
+                    }
+                    {#window.location.href='/index/';#}
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
+        }
         function postData(){
             {#alert(hex_md5($('input')[1].value));#}
             var usr=$('input')[0].value;

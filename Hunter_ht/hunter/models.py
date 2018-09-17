@@ -15,3 +15,7 @@ class Publications(models.Model):
     journalname=models.CharField(max_length=1000,default=' ')
     date =  models.DateField(default=timezone.now)
     index = models.CharField(max_length=100,default=' ')
+
+class PubToUser(models.Model):
+    pubID = models.BigIntegerField()
+    username = models.CharField(max_length=20)

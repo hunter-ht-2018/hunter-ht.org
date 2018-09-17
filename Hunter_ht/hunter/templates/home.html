@@ -135,8 +135,8 @@
 {#                    {%  endfor %}#}
                     {%  for publication in publications  %}
 		    		<tr>
-		    			<td class="col-xm-2 col-md-4">{{ publication.date }}</td>
-                        <td class="col-xm-10 col-md-6 col-md-offset-2">
+		    			<td class="col-xm-2 col-md-2">{{ publication.date }}</td>
+                        <td class="col-xm-10 col-md-10 col-md-offset-2">
                         	<p><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></p>
                         	<p>{{ publication.authors }}</p>
                         	<p>{{ publication.journalname }} {{publication.index}}</p>

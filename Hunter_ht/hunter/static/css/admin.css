@@ -1,0 +1,54 @@
+*{
+	margin:0;
+	padding: 0;
+}
+.userlist{
+    width:800px;
+    margin:100px auto;
+}
+button{
+    outline:none;
+}
+
+.adminForm{
+	width:100%;
+}
+#adduserform{
+    width:100%;
+}
+#adduserform > .form-group{
+    float:left;
+    margin:10px;
+}
+.adduserbtn, .deluserbtn{
+    display:inline-block;
+    width:100px;
+    height: 40px;
+    line-height: 40px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:16px;
+    border:none;
+    border-radius:5px;
+    vertical-align: middle;
+}
+.adduserbtn{
+    background-color: rgba(0,0,0, .70);
+    color:white;
+}
+.adduserbtn:hover{
+    background-color:black;
+}
+
+.deluserbtn{
+    background-color:antiquewhite;
+    color:black;
+}
+.deluserbtn:hover{
+    background-color: navajowhite;
+}
+@media (max-width: 767px){
+    .userlist{
+    width:100%;
+    margin:100px auto;
+}
+}

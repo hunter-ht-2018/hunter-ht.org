@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+#encoding=utf8
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,47 +12,119 @@ from .models import  *
 from django import forms
 from .models import User
 from .models import Publications
+from .models import PubToUser
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from django.core.exceptions import ObjectDoesNotExist
+import string
 from django.contrib.auth.hashers import make_password
 import os
+import json
 
 
 def home(request):
     if not Publications.objects.last():
         return render(request, 'home.html')
     else:
-        if Publications.objects.last().pubID>0:
-            publications = Publications.objects.filter()
+        if Publications.objects.last().pubID > 0:
+            publications = Publications.objects.all()
+            for publication in publications:
+                print publication.pubID
             return render_to_response('home.html',locals())
     return render(request, 'home.html')
 
-def register(request):
-    response = JsonResponse({"message":" "})
+
+def admin(request):
+    if User.objects.last():
+        if User.objects.last().userID > 0:
+            users = User.objects.all()
+            return render_to_response('admin.html',locals())
+def operator(request):
+    message={}
+    if request.is_ajax():
+        actiontype = request.POST.get('actiontype')
+        if actiontype == '0':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            if username == '' or password == '':
+                message["warning"] = "用户名或密码不能为空"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            result = User.objects.filter(name=username)
+            if result:
+                message["warning"] = "用户名已存在"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            if User.objects.last() is None:
+                userID = 1
+            else:
+                userID = User.objects.last().userID + 1
+            try:
+                userAdd=User.objects.create(userID=userID, name=username, pwd=password)
+                message["warning"]="添加成功"
+                users = User.objects.all()
+                userList = []
+                for user in users:
+                    userList.append(user.name)
+                message["users"] = userList
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            except ValidationError as e:
+                message["warning"]=e;
+                return HttpResponse(json.dumps(message), content_type='application/json')
+        if actiontype == '1':
+            delname = request.POST.get('delname')
+            try:
+                delrestlt = User.objects.filter(name=delname).delete()
+                message["warning"] = "删除成功"
+                users = User.objects.all()
+                userList = []
+                for user in users:
+                    userList.append(user.name)
+                message["users"] = userList
+                return HttpResponse(json.dumps(message), content_type='application/json')
+                # return render_to_response('admin.html',locals())
+            except:
+                message["warning"]="删除出错"
+    return render_to_response('admin.html', locals())
+
+def add_user(request):
     if request.is_ajax():
         username = request.POST.get('username')
         password = request.POST.get('password')
+        message={}
         if username == '' or password == '':
-            response = JsonResponse({"message": "用户名或密码不能为空"})
-            return response
+            # message["warning"]="用户名或密码不能为空"
+            # response = JsonResponse({"message": "用户名或密码不能为空"})
+            return render(request, 'admin.html', {'message': '用户名或密码不能为空'})
         result = User.objects.filter(name=username)
         if result:
-            response = JsonResponse({"message": "用户名已存在"})
-            return response
+            # message["warning"] = "用户名已存在"
+            # response = JsonResponse({"message": "用户名已存在"})
+            return render(request, 'admin.html',{'message':'用户名已存在'})
         if User.objects.last() is None:
             userID = 1
         else:
             userID = User.objects.last().userID + 1
-        try:
-            User.objects.create(userID=userID, name=username, pwd=password)
-            response = JsonResponse({"message": "添加成功"})
-            return response
-        except ValidationError as e:
-            response = JsonResponse({"message": "###create data wrong####"})
-            return response
-    return render(request, 'register.html')
+        userAdd=User.objects.create(userID=userID, name=username, pwd=password)
+        if userAdd:
+            # message["warning"]="添加成功"
+            return render(request, 'admin.html',{'message':'添加成功'})
+        else:
+            # message["warning"]="添加失败"
+            return render(request, 'admin.html',{'message':'添加失败'})
+        # try:
+        #     User.objects.create(userID=userID, name=username, pwd=password)
+            # response = JsonResponse({"message": "添加成功"})
+            # return HttpResponse(json.dumps(message), content_type='application/json')
+        # except ValidationError as e:
+        #     message["warning"] = e
+            # response = JsonResponse({"message": e})
+    return render(request, 'admin.html')
+
+
+def delete_user(request):
+    if request.is_ajax():
+        username = request.POST.get('username')
+
 
 
 def signin(request):
@@ -91,6 +164,8 @@ def upload(request):
     if request.method == 'POST':
         myfile = request.FILES.get('myfile', None)
         authors=request.POST.get('authors')
+        str='，'.decode('utf-8')
+        authors = authors.replace(str,',')
         journalname= request.POST.get('journalname')
         date= request.POST.get('date')
         index= request.POST.get('index')
@@ -120,6 +195,12 @@ def upload(request):
             try:
                 Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors,journalname=journalname,date=date,index=index)
             except ProgrammingError as e:
-                return render(request, 'upload.html', {'uploadError':e})
+                return render(request, 'upload.html', {'uploadError':'Publications表错误：' + e})
+            authorArr = authors.split(',')
+            for author in authorArr:
+                try:
+                    PubToUser.objects.create(pubID = pubID,username=author)
+                except ProgrammingError as e:
+                    return render(request, 'upload.html', {'uploadError': 'PubToUser数据表错误：' + e})
             return render(request, 'upload.html',{'uploadMessage':'上传成功'})
     return render(request, 'upload.html')
