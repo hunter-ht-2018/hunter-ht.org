@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect
 import string
 from django.contrib.auth.hashers import make_password
 import os
@@ -144,10 +145,10 @@ def signin(request):
             if db_info.pwd == password:
                 login_state['loginState']='LoginSuccess'
                 login_state['username']=db_info.name
-                # return render(request, 'index.html', {'username': username, 'password': password})
-                response = JsonResponse({"message": "登录成功"})
+                identity = db_info.identity;
+                response = JsonResponse({"message": "登录成功","identity":identity})
                 return response
-                # return render(request,'index.html', {'username': username, 'password': password})
+                # return render(request, 'index.html', {'username': username})
             else:
                 response = JsonResponse({"message": "密码错误"})
                 return response
@@ -158,27 +159,85 @@ def index(request):
         if Publications.objects.last().pubID>0:
             publications = Publications.objects.filter()
             return render_to_response('index.html',locals())
-    return render(request, 'home.html')
-
-def upload(request):
-    if request.method == 'POST':
+    if request.POST:
+        authors=request.POST.get('authors','')
         myfile = request.FILES.get('myfile', None)
-        authors=request.POST.get('authors')
+        str='，'.decode('utf-8')
+        authors = authors.replace(str,',')
+        type=request.POST.get('type')
+        journalname= request.POST.get('journalname')
+        date= request.POST.get('date')
+        index= request.POST.get('index')
+        message = {}
+        if not authors:
+            return render(request, 'index.html',{'uploadMessage':'请按要求填写论文作者'})
+        if type=='0':
+            return render(request, 'index.html',{'uploadMessage':'请选择出版类型'})
+        if not myfile:
+            return render(request, 'index.html',{'uploadError':'未选择任何文件'})
+        if not myfile.name.endswith('.pdf'):
+            return render(request,'index.html',{'uploadError':'请上传PDF文件'})
+        else:
+            title=request.POST.get('title')
+            if Publications.objects.filter(title=title):
+                return render(request, 'index.html', {'uploadMessage':'已存在该文件，请重命名或删除原文件后再执行该操作'})
+        if Publications.objects.last() is None:
+            pubID = 1
+        else:
+            pubID = Publications.objects.last().pubID+1
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        destination = os.path.join(BASE_DIR,'hunter', 'static', 'publications',myfile.name)
+        if os.path.exists(destination):
+            os.remove(destination)
+        with open(destination,'wb+') as dest:
+            for chunk in myfile.chunks():
+                dest.write(chunk)
+            dest.close()
+            link=os.path.join('static','publications',myfile.name)
+            try:
+                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors, publishType=type, journalname=journalname,date=date,index=index)
+            except ProgrammingError as e:
+                return render(request, 'index.html', {'uploadError':'Publications表错误：' + e})
+            authorArr = authors.split(',')
+            for author in authorArr:
+                try:
+                    PubToUser.objects.create(pubID = pubID,username=author)
+                    uploadMessage = '文件上传成功'
+                    publications = Publications.objects.filter()
+                    return render_to_response('index.html', locals())
+                except ProgrammingError as e:
+                    return render(request, 'index.html', {'uploadError': 'PubToUser数据表错误：' + e})
+    return render(request, 'index.html')
+
+#目前这段代码没有用到
+def upload(request):
+    if request.POST:
+        authors=request.POST.get('authors','')
+        myfile = request.FILES.get('myfile', None)
         str='，'.decode('utf-8')
         authors = authors.replace(str,',')
         journalname= request.POST.get('journalname')
         date= request.POST.get('date')
         index= request.POST.get('index')
+        message = {}
         if not authors:
-            return render(request, 'upload.html',{'uploadMessage':'请按要求填写论文作者'})
+            # message["warning"] = "请按要求填写论文作者"
+            # return HttpResponse(json.dumps(message), content_type='application/json')
+            return render(request, 'index.html',{'uploadMessage':'请按要求填写论文作者'})
         if not myfile:
-            return render(request, 'upload.html',{'uploadError':'未选择任何文件'})
+            # message["warning"] = "未选择任何文件"
+            # return HttpResponse(json.dumps(message), content_type='application/json')
+            return render(request, 'index.html',{'uploadError':'未选择任何文件'})
         if not myfile.name.endswith('.pdf'):
-            return render(request,'upload.html',{'uploadError':'请上传PDF文件'})
+            # message["warning"] = "请上传PDF文件"
+            # return HttpResponse(json.dumps(message), content_type='application/json')
+            return render(request,'index.html',{'uploadError':'请上传PDF文件'})
         else:
             title=request.POST.get('title')
             if Publications.objects.filter(title=title):
-                return render(request, 'upload.html', {'uploadMessage':'已存在该文件，请重命名或删除原文件后再执行该操作'})
+                # message["warning"] = "已存在该文件，请重命名或删除原文件后再执行该操作"
+                # return HttpResponse(json.dumps(message), content_type='application/json')
+                return render(request, 'index.html', {'uploadMessage':'已存在该文件，请重命名或删除原文件后再执行该操作'})
         if Publications.objects.last() is None:
             pubID = 1
         else:
@@ -195,12 +254,18 @@ def upload(request):
             try:
                 Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors,journalname=journalname,date=date,index=index)
             except ProgrammingError as e:
-                return render(request, 'upload.html', {'uploadError':'Publications表错误：' + e})
+                # message["warning"] = "Publications表错误:"+e
+                # return HttpResponse(json.dumps(message), content_type='application/json')
+                return render(request, 'index.html', {'uploadError':'Publications表错误：' + e})
             authorArr = authors.split(',')
             for author in authorArr:
                 try:
                     PubToUser.objects.create(pubID = pubID,username=author)
+                    return redirect(request, 'index.html', {'uploadMessage': '文件上传成功'})
                 except ProgrammingError as e:
-                    return render(request, 'upload.html', {'uploadError': 'PubToUser数据表错误：' + e})
-            return render(request, 'upload.html',{'uploadMessage':'上传成功'})
-    return render(request, 'upload.html')
+                    # message["warning"] = "PubToUser数据表错误:"+e
+                    # return HttpResponse(json.dumps(message), content_type='application/json')
+                    return render(request, 'index.html', {'uploadError': 'PubToUser数据表错误：' + e})
+            # message["warning"] = "上传成功"
+            # return HttpResponse(json.dumps(message), content_type='application/json')
+    return redirect(request, 'index.html')

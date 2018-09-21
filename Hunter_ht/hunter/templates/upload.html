@@ -6,6 +6,7 @@
 	<meta name="decription" content="Upload">
 	<meta name="author" content="liuyingying">
     <title>Upload Publication</title>
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
 	<link rel="stylesheet" href="../static/css/bootstrap.css">
 	<link rel="stylesheet" href="../static/css/upload.css">
 </head>
@@ -57,6 +58,17 @@
 	        </div>
         </form>
 	</div>
+<script>
+    $(function(){
+        var storage=window.sessionStorage;
+        var username=storage.username;
+        if(username != null&&username.toString().length>0){
+        }else{
+            alert("请先登录");
+            window.location.href="/signin/";
+        }
+    });
+</script>
     
 </body>
 </html>

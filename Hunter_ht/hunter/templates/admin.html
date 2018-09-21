@@ -15,12 +15,15 @@
 </head>
 <body>
 
+    <nav class="navbar navbar-fixed-top " >
+        <div id="hunterLogo">Hunter</div>
+        <div id="adminname" ></div>
+    </nav>
 
     <div class="userlist">
         <div  class="adminForm">
             <div id="adduserform" class="form-horizontal"  >
                 <div class="form-group">
-    {#	    		<label class="col-sm-2 control-label">Username</label>#}
                     <div>
                         <input name="username" class="form-control" type="text" class="form-control" placeholder="Name" required autofocus>
                     </div>
@@ -67,6 +70,20 @@
                 data['actiontype']='0'; //0 添加用户 1 删除用户
                 encryptSend('/operator/', data);  // Jsencrypt.do对应服务端处理地址
             });
+            var storage=window.sessionStorage;
+            var username=storage.username;
+            var identity=storage.identity;
+            if(username != null&&username.toString().length>0){
+                if(identity=='0'){
+                    alert("请以管理员身份登录");
+                    window.location.href="/signin/";
+                }else{
+                    $("#adminname").text(username);
+                }
+            }else{
+                alert("请先登录");
+                window.location.href="/signin/";
+            }
         });
 
         function delUser(thisbtn) {

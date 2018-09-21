@@ -18,7 +18,7 @@
         <a class="navbar-brand nav-title" href="#">Hunter</a>
         <!-- logo on right -->
         <a class="write-btn">Write</a>
-        <div id="username">L</div>
+        <div id="username"></div>
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
@@ -39,12 +39,17 @@
                   <span class="menu-text">Articles</span>
                 </a>
               </li>
+              <li class="tab">
+                <a href="#" onclick="showUpload()">
+                  <span class="menu-text">Upload</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
-    <div class="content-two container"  style="height: 800px; border:solid 1px black">
+    <div class="content-two container content-border">
         <section id="publications" class="list">
             <table class="table tableList">
               <thead>
@@ -53,18 +58,23 @@
               <tbody>
                   {%  for publication in publications  %}
                   <tr>
-                      <td class="col-xm-2 col-md-2">{{ publication.date }}</td>
-                            <td class="col-xm-10 col-md-10 col-md-offset-2">
-                              <p><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></p>
-                              <p>{{ publication.authors }}</p>
-                              <p>{{ publication.journalname }} {{publication.index}}</p>
-                            </td>
+                      <td class="col-sm-2 col-md-2">
+                          {{ publication.publishType }}
+                          <br>
+                          {{ publication.date }}
+                      </td>
+                      <td class="col-sm-10 col-md-10 col-md-offset-2">
+                          <p><a href=../{{ publication.link }} target="_blank">{{ publication.title }}</a></p>
+                          <p>{{ publication.authors }}</p>
+                          <p>{{ publication.journalname }} {{publication.index}}</p>
+                      </td>
+
                   </tr>
                   {%  endfor %}
               </tbody>
             </table>
         </section>
-        <section id="articles" class="list move-art">
+        <section id="articles" class="list move-pub">
           <ul class="node-list">
             <li>
               <div class="article-content">
@@ -104,21 +114,143 @@
             </li>
           </ul>
         </section>
+        <section id="upload" class="list move-pub">
+            <div class="uploadForm" >
+                <form class="form-horizontal" role="form" action="/index/" method="post" enctype="multipart/form-data" >
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">作者</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control" placeholder="Example:Tom,Bob,Jane" name="authors" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text"  class="form-control"  name="title" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">文件</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="file" name="myfile" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+{#                        <label class="col-sm-2 control-label">名称</label>#}
+                        <select class="col-sm-2 control-select" name="type">
+                            <option value="0">请选择</option>
+                            <option value="会议">会议</option>
+                            <option value="期刊">期刊</option>
+                            <option value="专利">专利</option>
+                            <option value="软著">软著</option>
+                        </select>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control"  name="journalname" placeholder="名称" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">日期</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control" placeholder="示例：2018-08-08"  name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">检索类型</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control" name="index" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10 upload-btn">
+                            <button type="submit" class="btn btn-default">提交</button>
+					        <p id="uploadError" style="color:red;">{{ uploadError }}</p><p id="uploadMessage" style="color:red;">{{ uploadMessage }}</p>
+                        </div>
+                    </div>
+                </form>
+	        </div>
+        </section>
     </div>
     <script type="text/javascript">
-      function showPub(){
-        var ifpubhidden=$("#publications").hasClass("move-pub");
-        if(ifpubhidden){
-          $("#publications").removeClass("move-pub");
-          $("#articles").addClass("move-art");
+        $(document).ready(function() {
+            getUsername();
+            var uploadMessage = document.getElementById("uploadMessage").innerHTML;
+            if(uploadMessage!=null&&uploadMessage!=""){
+                alert(uploadMessage);
+            }
+            var uploadError = document.getElementById("uploadError").innerHTML;
+            if(uploadError!=null&&uploadError!=""){
+                alert("数据库错误，请联系管理员");
+            }
+            {#$('#submit').click(function() {#}
+            {#    var data = [];#}
+            {#    data["authors"]= $('input')[0].value;#}
+            {#    data["title"]= $('input')[1].value;#}
+            {#    data["myfile"]= $('input')[2].files[0];#}
+            {#    data["journalname"]= $('input')[3].value;#}
+            {#    data["date"]= $('input')[4].value;#}
+            {#    data["index"]= $('input')[5].value;#}
+            {#    uploadFile('/upload/', data);  // Jsencrypt.do对应服务端处理地址#}
+
+        });
+        function uploadFile(url, data){
+            $.ajax({
+                url: url,
+                type: 'post',
+                data:{
+                    "authors":data["authors"],
+                    "title":data["title"],
+                    "myfile":data["myfile"],
+                    "journalname":data["journalname"],
+                    "date":data["date"],
+                    "index":data["index"],
+                },
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function (msg) {
+                    $("#uploadMessage").text(msg["warning"]);
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
         }
+
+        function getUsername(){
+            var storage=window.sessionStorage;
+            var username=storage.username;
+            if(username != null&&username.toString().length>0){
+                $("#username").text(username);
+            }else{
+                alert("请先登录");
+                window.location.href="/signin/";
+            }
+        }
+
+        function GetQueryString(name)
+        {
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null){
+                 return unescape(r[2]);
+             }
+             return null;
+        }
+      function showPub(){
+        $("#publications").hasClass("move-pub")?$("#publications").removeClass("move-pub"):1==1;
+        $("#articles").hasClass("move-pub")?1==1:$("#articles").addClass("move-pub");
+        $("#upload").hasClass("move-pub")?1==1:$("#upload").addClass("move-pub");
       }
       function showArt(){
-        var ifpubhidden=$("#publications").hasClass("move-pub");
-        if(!ifpubhidden){
-          $("#publications").addClass("move-pub");
-          $("#articles").removeClass("move-art");
-        }
+        $("#publications").hasClass("move-pub")?1==1:$("#publications").addClass("move-pub");
+        $("#articles").hasClass("move-pub")?$("#articles").removeClass("move-pub"):1==1;
+        $("#upload").hasClass("move-pub")?1==1:$("#upload").addClass("move-pub");
+      }
+      function showUpload(){
+        $("#publications").hasClass("move-pub")?1==1:$("#publications").addClass("move-pub");
+        $("#articles").hasClass("move-pub")?1==1:$("#articles").addClass("move-pub");
+        $("#upload").hasClass("move-pub")?$("#upload").removeClass("move-pub"):1==1;
       }
     </script>
     

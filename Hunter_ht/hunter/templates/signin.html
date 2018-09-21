@@ -16,13 +16,13 @@
 </head>
 <body>
     <div class="container text-center">
-		<form id="signinform" class="form-signin col-centered" action="/signin/" method="POST" role="form">
+		<div id="signinform" class="form-signin col-centered" action="/signin/" method="POST" role="form">
 			<h2 class="form-signin-heading">Sign In</h2>
 			<input name="username" type="text" class="form-control" placeholder="Name" required autofocus>
 			<input name="password" style="-webkit-text-security:disc;text-security:disc;" type="text" autocomplete="off" class="form-control" placeholder="Password" required>
-			<button id="submit" class="btn btn-lg btn-primary btn-block" type="submit" >登录</button>
+			<button id="submit" class="btn btn-lg btn-primary btn-block" >登录</button>
             <p style="color:red">{{ login_error }}</p>
-		</form>
+		</div>
 	</div>
     <script type="text/javascript">
         $(function() {
@@ -33,6 +33,7 @@
                 encryptSend('/signin/', data);  // Jsencrypt.do对应服务端处理地址
             });
         });
+
         function encryptSend(url, data){
             //var jsencrypt = new JSEncrypt();
             // enData用来装载加密后的数据
@@ -49,13 +50,19 @@
                     "password":enData["password"],
                 },
                 dataType: 'json',
-                success: function (data) {
-                    if(data["message"]=="登录成功"){
-                        window.location.href='/index/';
+                success: function (msg) {
+                    if(msg["message"]=="登录成功"){
+                        var storage = window.sessionStorage;
+                        storage['username'] = enData["username"];
+                        storage['identity'] = msg["identity"];
+                        if(msg["identity"]=="0"){
+                            window.location.href='/index/';
+                        }else{
+                            window.location.href='/admin/';
+                        }
                     }else{
-                        alert(data["message"]);
+                        alert(msg["message"]);
                     }
-                    {#window.location.href='/index/';#}
                 },
                 error: function (xhr) {
                     console.error('Something went wrong....');
