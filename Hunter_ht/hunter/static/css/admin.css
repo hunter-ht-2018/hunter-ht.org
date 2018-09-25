@@ -44,7 +44,7 @@ nav{
     float:left;
     margin:10px;
 }
-.adduserbtn, .deluserbtn{
+.adduserbtn, .deluserbtn, .resetPwd{
     display:inline-block;
     width:100px;
     height: 40px;
@@ -70,9 +70,16 @@ nav{
 .deluserbtn:hover{
     background-color: navajowhite;
 }
+.resetPwd{
+    background-color: lightgray;
+    color:black;
+}
+.resetPwd:hover{
+    background-color: darkgray;
+}
 @media (max-width: 767px){
     .userlist{
     width:100%;
     margin:100px auto;
-}
+    }
 }

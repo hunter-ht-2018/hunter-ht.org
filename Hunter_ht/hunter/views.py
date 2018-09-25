@@ -85,6 +85,18 @@ def operator(request):
                 # return render_to_response('admin.html',locals())
             except:
                 message["warning"]="删除出错"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+        if actiontype == '2':
+            resetPwd = request.POST.get('resetPwd')
+            resetname = request.POST.get('resetname')
+            try:
+                User.objects.filter(name=resetname).update(pwd=resetPwd)
+                message["warning"]="密码更新成功"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            except:
+                message["warning"]="密码更新错误"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+
     return render_to_response('admin.html', locals())
 
 def add_user(request):
