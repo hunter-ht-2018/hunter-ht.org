@@ -15,12 +15,34 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-fixed-top " >
+    <nav class="navbar" >
         <div id="hunterLogo">Hunter</div>
         <div id="adminname" ></div>
     </nav>
+    <div id="leftBar">
+        <ul>
+            <li id="useradminLi" onclick="change(this)" style="background-color:navajowhite">用户管理</li>
+            <li id="setadminLi" onclick="change(this)">权限设置</li>
+            <li>其他功能</li>
+        </ul>
+    </div>
+    <div id="setadmin" class="userlist" style="display: none;">
+        <table class="table tableList">
+		    	<thead>
 
-    <div class="userlist">
+		    	</thead>
+		    	<tbody>
+                    {%  for user in users  %}
+		    		<tr>
+		    			<td class="col-xm-4 col-md-4">{{ user.name }}</td>
+                        <td class="col-xm-4 col-md-4 col-md-offset-2">{{ user.identity }}</td>
+                        <td><button  class="col-xm-2 col-md-2 resetPwd" onclick="changeIdentity(this)">更改权限</button></td>
+		    		</tr>
+                    {%  endfor %}
+		    	</tbody>
+		    </table>
+    </div>
+    <div id="useradmin" class="userlist" onclick="change(this)">
         <div  class="adminForm">
             <div id="adduserform" class="form-horizontal"  >
                 <div class="form-group">
@@ -63,6 +85,8 @@
 
     <script>
         $(document).ready(function() {
+            var h= window.innerHeight;
+            $('#leftBar').height(h-50);
             $('#submitAddUser').click(function() {
                 var data = [];
                 data['username']= $('input')[0].value;
@@ -86,6 +110,20 @@
             }
         });
 
+        function change(thisbtn){
+            var divname = $(thisbtn).attr('id');
+            thisbtn.style.backgroundColor='navajowhite';
+            if(divname=='useradminLi'){
+                $('#useradmin').css('display','block');
+                $('#setadmin').css('display','none');
+                $('#setadminLi').css('background-color','antiquewhite');
+            }else{
+                $('#useradmin').css('display','none');
+                $('#setadmin').css('display','block');
+                $('#useradminLi').css('background-color','antiquewhite');
+            }
+        }
+
         function delUser(thisbtn) {
             var delname = thisbtn.parentElement.parentElement.firstElementChild.innerHTML;
             $.ajax({
@@ -100,6 +138,37 @@
                     alert(message["warning"]);
                     if(message["warning"]=="删除成功"){
                         thisbtn.parentElement.parentElement.remove();
+                    }
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
+        }
+        function changeIdentity(thisbtn) {
+            var username = thisbtn.parentElement.parentElement.firstElementChild.innerHTML;
+            var nowIdentity = thisbtn.parentElement.parentElement.children[1].textContent.replace(/[\r\n]/g,"").replace(/[ ]/g,"");
+            var identity = '1';
+            if(nowIdentity == "管理员"){
+                identity='0';
+            }
+            $.ajax({
+                url: '/operator/',
+                type: 'post',
+                data:  {
+                    "username":username,
+                    "identity":identity,
+                    "actiontype":'3',
+                },
+                dataType: 'json',
+                success: function (message) {
+                    alert(message["warning"]);
+                    if(message["flag"]=="1"){
+                        if(identity=='0'){
+                            thisbtn.parentElement.parentElement.children[1].innerHTML="普通用户";
+                        }else{
+                            thisbtn.parentElement.parentElement.children[1].innerHTML="管理员";
+                        }
                     }
                 },
                 error: function (xhr) {
