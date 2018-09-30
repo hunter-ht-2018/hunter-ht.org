@@ -13,6 +13,7 @@ from django import forms
 from .models import User
 from .models import Publications
 from .models import PubToUser
+from .models import Articles
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.db.utils import ProgrammingError
@@ -40,6 +41,11 @@ def admin(request):
     if User.objects.last():
         if User.objects.last().userID > 0:
             users = User.objects.all()
+            for user in users:
+                if user.identity=='0':
+                    user.identity = '普通用户'
+                else:
+                    user.identity = '管理员'
             return render_to_response('admin.html',locals())
 def operator(request):
     message={}
@@ -96,6 +102,19 @@ def operator(request):
             except:
                 message["warning"]="密码更新错误"
                 return HttpResponse(json.dumps(message), content_type='application/json')
+        if actiontype == '3':
+            identity = request.POST.get('identity')
+            username = request.POST.get('username')
+            try:
+                User.objects.filter(name=username).update(identity=identity)
+                print (identity)
+                message["flag"]="1";
+                message["warning"]="权限更改成功"
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            except:
+                message["warning"]="权限更改错误"
+                message["flag"]="1";
+                return HttpResponse(json.dumps(message), content_type='application/json')
 
     return render_to_response('admin.html', locals())
 
@@ -134,9 +153,9 @@ def add_user(request):
     return render(request, 'admin.html')
 
 
-def delete_user(request):
-    if request.is_ajax():
-        username = request.POST.get('username')
+# def delete_user(request):
+#     if request.is_ajax():
+#         username = request.POST.get('username')
 
 
 
@@ -281,3 +300,31 @@ def upload(request):
             # message["warning"] = "上传成功"
             # return HttpResponse(json.dumps(message), content_type='application/json')
     return redirect(request, 'index.html')
+
+# markdown编辑
+def write(request):
+    if request.is_ajax():
+        username = request.POST.get('username','')
+        title = request.POST.get('title','')
+        content = request.POST.get('content','')
+        publish = request.POST.get('publish','')
+        if Articles.objects.last() is None:
+            articleID = 1
+        else:
+            articleID = Articles.objects.last().articleID+1
+        try:
+            authorID = User.objects.get(name=username).userID
+        except ObjectDoesNotExist as e:
+            response = JsonResponse({"message": e})
+            return response
+        if not authorID:
+            response = JsonResponse({"message": "该作者不存在"})
+            return response
+        else:
+            try:
+                Articles.objects.create(articleID=articleID, authorID = authorID, title = title, content = content,publish=publish)
+                response = JsonResponse({"message": "文章保存成功"})
+            except EOFError as e:
+                response = JsonResponse({"message":e})
+            return response
+    return render(request,'write.html')

@@ -22,3 +22,10 @@ class Publications(models.Model):
 class PubToUser(models.Model):
     pubID = models.BigIntegerField()
     username = models.CharField(max_length=20)
+
+class Articles(models.Model):
+    articleID = models.BigIntegerField(primary_key=True)
+    authorID = models.IntegerField()
+    title = models.CharField(max_length=500,default=' ')
+    content = models.TextField()
+    publish = models.CharField(max_length=5,default='0')

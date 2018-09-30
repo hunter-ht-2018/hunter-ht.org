@@ -1,0 +1,149 @@
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	overflow: hidden;
+}
+
+/* Markdown解析样式 */
+blockquote {
+    color: rgba(0,0,0,.5);
+    padding-left: 1.5em;
+    border-left: 5px solid rgba(0,0,0,.1);
+}
+blockquote {
+    display: block;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 40px;
+	-webkit-margin-end: 40px;
+}
+ul li {
+    line-height: 20px;
+}
+code {
+	background-color: rgba(0,0,0,.05);
+    display: block;
+    padding: .5em;
+    -webkit-text-size-adjust: none;
+    overflow-x: auto;
+    white-space: pre;
+}
+/* Markdown解析样式 */
+
+a{
+	color:#ea6f5a;
+	text-decoration: none;
+	transition: ease-in-out color .5s;
+}
+a:hover{
+	text-decoration: none;
+	color:#c59a6d;
+	transition: ease-in-out color .5s;
+}
+
+.navbar{
+	background-color: black;
+	color: #ea6f5a;
+}
+#username{
+	width:100px;
+	height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+	float: left;
+}
+.btns{
+	width:auto;
+	float: right;
+	padding: 15px 15px;
+	height: 50px;
+	line-height: 20px;
+}
+.btns > button{
+	margin-right: 20px;
+}
+#save, #publish, #return{
+	float: left;
+}
+
+#return{
+	height: 50px;
+	line-height: 30px;
+}
+
+button{
+	width:30px;
+	height: 30px;
+	border:0;
+	background-color: transparent;
+	outline: none;
+	float: right;
+}
+button:hover{
+	width:32px;
+	height: 32px;
+	outline: none;
+}
+svg{
+	width:100%;
+	height: 100%;
+}
+textarea{
+	border:0;
+	outline: none;
+}
+.titleDiv{
+	width:300px;
+	height:50px;
+	margin-top:70px;
+	margin-left:80px;
+	margin-bottom: 5px;
+	font-size:18px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#markdownCnt{
+	width:90%;
+	margin: 0 auto;
+	position: relative;
+}
+#controlBar{
+	width:50px;
+	height: 50px;
+	margin:5px 8px;
+	margin-left: 50px;
+	float: left;
+	position: absolute;
+	top:0;
+	right: 0;
+}
+#originCnt{
+	width:50%;
+	height:100%;
+	margin: 0;
+	float: left;
+	resize: none;
+	background-color: rgba(0, 0, 0, 0.10);
+}
+.halfView{
+	width: 50%;
+}
+#textCnt{
+	height: 100%;
+	overflow-y: scroll;
+	background-color: #fcf8e3;
+	float: left;
+	/*background-color: lightpink;*/
+}
+
+
+.hide{
+	display: none;
+}
+
+.preview{
+	width:80%;
+	height: 100%;
+}

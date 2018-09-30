@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^admin/$',views.admin),
     url(r'^operator/$', views.operator),
     url(r'^upload/$',views.upload),
+    url(r'^write/$',views.write),
     url(r'^/static/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
 ]
