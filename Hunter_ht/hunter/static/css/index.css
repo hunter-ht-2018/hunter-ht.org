@@ -73,11 +73,11 @@ a:active{
 	float: right;
 }
 ul{
-	width:500px;
+	width:90%;
 	list-style: none;
 }
 li{
-	width:33%;
+	width:25%;
 	float: left;
 }
 
@@ -116,7 +116,6 @@ span{
 	margin-top: 100px;
 	position: relative;
 	overflow: hidden;
-	border:solid 1px black
 }
 
 .list{
@@ -132,7 +131,6 @@ span{
 	/*left:-100%;*/
 	transform: translate(-110%,0);
 	-webkit-transform:translate(-110%,0);
-	background-color: black;
 }
 
 
@@ -144,6 +142,7 @@ span{
 }
 .node-list > li{
 	list-style: none;
+	width:100%;
 	margin:10px;
 }
 .uploadForm{
@@ -216,4 +215,39 @@ span{
 		color:#ea6f5a;
 	}
 
+}
+svg{
+	width:100%;
+	height:100%;
+}
+.editbtn, .delebtn{
+	width:20px;
+	height:20px;
+	float: right;
+	border:none;
+	background:white;
+	margin:0 10px;
+}
+
+.editbtn :hover, .delebtn :hover{
+	width:25px;
+	height:25px;
+}
+.article-content > p{
+	float: left;
+	width:80%;
+	height:30px;
+	overflow:hidden;
+}
+.article-content > a{
+	cursor: pointer;
+}
+.article-content > p{
+	margin:10px 0;
+}
+.article-content > span {
+	float: right;
+}
+.title{
+	font-size:20px;
 }

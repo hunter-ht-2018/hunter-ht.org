@@ -10,6 +10,7 @@ from django.shortcuts import HttpResponseRedirect,Http404,render_to_response
 from django.contrib import auth
 from .models import  *
 from django import forms
+from django.core import serializers
 from .models import User
 from .models import Publications
 from .models import PubToUser
@@ -31,6 +32,7 @@ def home(request):
     else:
         if Publications.objects.last().pubID > 0:
             publications = Publications.objects.all()
+            articles = Articles.objects.filter(publish="1")
             for publication in publications:
                 print publication.pubID
             return render_to_response('home.html',locals())
@@ -186,9 +188,17 @@ def signin(request):
     return render(request, 'signin.html')
 
 def index(request):
+    if request.method=="GET":
+        if 'user' in request.GET:
+            username = request.GET.get('user')
+            userID = User.objects.get(name=username).userID
+            articles = Articles.objects.filter(authorID = userID)
+            articles = serializers.serialize("json",articles)
+            print articles
+            return HttpResponse(articles)
     if Publications.objects.last():
         if Publications.objects.last().pubID>0:
-            publications = Publications.objects.filter()
+            publications = Publications.objects.all()
             return render_to_response('index.html',locals())
     if request.POST:
         authors=request.POST.get('authors','')
@@ -315,16 +325,19 @@ def write(request):
         try:
             authorID = User.objects.get(name=username).userID
         except ObjectDoesNotExist as e:
-            response = JsonResponse({"message": e})
+            response = JsonResponse({"warning": e})
             return response
         if not authorID:
-            response = JsonResponse({"message": "该作者不存在"})
+            response = JsonResponse({"warning": "该作者不存在"})
             return response
         else:
             try:
                 Articles.objects.create(articleID=articleID, authorID = authorID, title = title, content = content,publish=publish)
-                response = JsonResponse({"message": "文章保存成功"})
+                if publish == '0':
+                    response = JsonResponse({"warning": "文章保存成功"})
+                else:
+                    response = JsonResponse({"warning": "文章发布成功"})
             except EOFError as e:
-                response = JsonResponse({"message":e})
+                response = JsonResponse({"warning":e})
             return response
     return render(request,'write.html')
