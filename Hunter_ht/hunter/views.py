@@ -193,13 +193,19 @@ def index(request):
             username = request.GET.get('user')
             userID = User.objects.get(name=username).userID
             articles = Articles.objects.filter(authorID = userID)
+            print articles
             articles = serializers.serialize("json",articles)
             print articles
             return HttpResponse(articles)
-    if Publications.objects.last():
-        if Publications.objects.last().pubID>0:
-            publications = Publications.objects.all()
-            return render_to_response('index.html',locals())
+    if request.is_ajax():
+        title = request.POST.get('title')
+        try:
+            Articles.objects.filter(title=title).delete()
+            response = JsonResponse({"warning":"文章删除成功"});
+            return response
+        except ProgrammingError as e:
+            response = JsonResponse({"warning":"文章删除失败"});
+            return response
     if request.POST:
         authors=request.POST.get('authors','')
         myfile = request.FILES.get('myfile', None)
@@ -248,7 +254,24 @@ def index(request):
                     return render_to_response('index.html', locals())
                 except ProgrammingError as e:
                     return render(request, 'index.html', {'uploadError': 'PubToUser数据表错误：' + e})
+
+    if Publications.objects.last():
+        if Publications.objects.last().pubID>0:
+            publications = Publications.objects.all()
+            return render_to_response('index.html',locals())
     return render(request, 'index.html')
+
+
+def view(request):
+    if request.method=="GET":
+        if 'title' in request.GET:
+            title = request.GET.get('title')
+            article = Articles.objects.get(title=title).content
+            authorID=Articles.objects.get(title=title).authorID
+            authorname = User.objects.get(userID=authorID).name
+            # jsonStr = '[{"view"：{"title":'+title+',"article":'+article+',"authorname":'+authorname+'}}]'
+            return render_to_response("view.html",locals())
+
 
 #目前这段代码没有用到
 def upload(request):
@@ -313,31 +336,59 @@ def upload(request):
 
 # markdown编辑
 def write(request):
+    if request.method == "GET":
+        if 'title' in request.GET:
+            title = request.GET.get('title')
+            articleCnt = Articles.objects.get(title = title).content
+            return render_to_response("write.html",locals())
     if request.is_ajax():
         username = request.POST.get('username','')
         title = request.POST.get('title','')
         content = request.POST.get('content','')
         publish = request.POST.get('publish','')
+        #加入判断题目是否相同
+        isHave = Articles.objects.filter(title=title)
+        isNew = request.POST.get('isNew')
+        oldtitle=request.POST.get('oldtitle')
+        if isHave and isNew=='1':
+            response = JsonResponse({"warning":"该文章题目已存在"})
+            return response
+        else:
+            if isNew == '0':
+                try:
+                    Articles.objects.filter(title=oldtitle).update(title=title,content=content,publish=publish)
+                    print "jaja"
+                    if publish == '0':
+                        response = JsonResponse({"warning": "文章更新已保存，尚未发布"})
+                        return response
+                    else:
+                        response = JsonResponse({"warning": "文章更新已发布成功"})
+                        return response
+                except ProgrammingError as e:
+                    response = JsonResponse({"warning":e})
+                    return response
         if Articles.objects.last() is None:
             articleID = 1
         else:
             articleID = Articles.objects.last().articleID+1
         try:
             authorID = User.objects.get(name=username).userID
+            if not authorID:
+                response = JsonResponse({"warning": "该作者不存在"})
+                return response
+            else:
+                try:
+                    Articles.objects.create(articleID=articleID, authorID=authorID, title=title, content=content,
+                                            publish=publish)
+                    if publish == '0':
+                        response = JsonResponse({"warning": "文章保存成功"})
+                    else:
+                        response = JsonResponse({"warning": "文章发布成功"})
+                except EOFError as e:
+                    response = JsonResponse({"warning": e})
+                return response
         except ObjectDoesNotExist as e:
             response = JsonResponse({"warning": e})
             return response
-        if not authorID:
-            response = JsonResponse({"warning": "该作者不存在"})
-            return response
-        else:
-            try:
-                Articles.objects.create(articleID=articleID, authorID = authorID, title = title, content = content,publish=publish)
-                if publish == '0':
-                    response = JsonResponse({"warning": "文章保存成功"})
-                else:
-                    response = JsonResponse({"warning": "文章发布成功"})
-            except EOFError as e:
-                response = JsonResponse({"warning":e})
-            return response
+
     return render(request,'write.html')

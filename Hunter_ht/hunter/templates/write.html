@@ -24,11 +24,11 @@
     </nav>
 	<div class="titleDiv">
 		<label>标题</label>
-		<input id="title" type="text" name="title" required>
+		<input id="title" type="text" name="title" value="{{ title }}" required>
 	</div>
 	
 	<div id="markdownCnt">
-		<textarea id = "originCnt"  oninput="compile()" placeholder="Start your writing"></textarea>
+		<textarea id = "originCnt"  oninput="compile()" placeholder="Start your writing">{{ articleCnt }}</textarea>
 	<!-- <button onclick="compile()">转换</button> -->
 		<div id="textCnt" class="halfView">
 			</div>
@@ -96,6 +96,11 @@
         var title = document.getElementById("title").value;
         var content = document.getElementById("originCnt").value;
         var publish = '0';
+        var isNew = window.location.search?'0':'1';
+        var oldtitle ='';
+        if(isNew=='0'){
+            oldtitle = getUrlParam('title');
+        }
         $.ajax({
             url:url,
             type:'post',
@@ -104,17 +109,32 @@
                     "title":title,
                     "content":content,
                     "publish":publish,
+                    "isNew":isNew,
+                    "oldtitle":oldtitle,
                 },
             success:function (message) {
                 alert(message["warning"]);
             },
         });
 	}
+	function getUrlParam(name){
+	    var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+	    var r = window.location.search.substr(1).match(reg);
+	    if(r!=null)
+	        return unescape(r[2]);
+	    return null;
+    }
+
 	function publish(url){
 		var username = document.getElementById("username").innerHTML;
         var title = document.getElementById("title").value;
         var content = document.getElementById("originCnt").value;
         var publish = '1';
+        var isNew = window.location.search?'0':'1';
+        var oldtitle ='';
+        if(isNew=='0'){
+            oldtitle = getUrlParam('title');
+        }
         $.ajax({
             url:url,
             type:'post',
@@ -123,6 +143,8 @@
                     "title":title,
                     "content":content,
                     "publish":publish,
+                    "isNew":isNew,
+                    "oldtitle":oldtitle,
                 },
             dataType:'json',
             success:function (message) {
