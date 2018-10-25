@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import datetime
 # Create your models here.
 class User(models.Model):
     userID = models.BigIntegerField(primary_key=True)
@@ -29,3 +30,4 @@ class Articles(models.Model):
     title = models.CharField(max_length=500,default=' ')
     content = models.TextField()
     publish = models.CharField(max_length=5,default='0')
+    editDateTime = models.DateField(default=datetime.datetime.now().date())

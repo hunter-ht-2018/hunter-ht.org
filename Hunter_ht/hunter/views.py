@@ -24,6 +24,7 @@ import string
 from django.contrib.auth.hashers import make_password
 import os
 import json
+import datetime
 
 
 def home(request):
@@ -33,10 +34,99 @@ def home(request):
         if Publications.objects.last().pubID > 0:
             publications = Publications.objects.all()
             articles = Articles.objects.filter(publish="1")
+            names = PubToUser.objects.values('username')
+            pubAuthors=[]
+            for name in names:
+                if name['username'] not in pubAuthors:
+                    pubAuthors.append(name['username'])
             for publication in publications:
                 print publication.pubID
             return render_to_response('home.html',locals())
     return render(request, 'home.html')
+
+def search(request):
+    pubs={}
+    if request.is_ajax():
+        # title = request.POST.get('titlekey')
+        # request.body.count()
+        author = request.POST.get('authorkey')
+        if author=='' or author==None:
+            message = JsonResponse({"warning": "搜索内容不能为空"})
+            return HttpResponse(json.dumps(message), content_type='application/json')
+        else:
+            if author == 'All' or author=='':
+                pub={}
+                message=""
+                publications=Publications.objects.all()
+                for publication in publications:
+                    pub["title"] = str(publication.title)
+                    pub["link"] = str(publication.link)
+                    pub["authors"] = str(publication.authors)
+                    pub["messages"] = str(publication.messages)
+                    pub["journalname"] = str(publication.journalname)
+                    pub["date"] = str(publication.date)
+                    pub["publishType"] = str(publication.publishType.encode('utf-8'))
+                    pub["index"] = str(publication.index)
+                    message += '{"title":"' + pub["title"] + '","link":"' + pub["link"] + '","authors":"' + pub[
+                        "authors"] + '","messages":"' + pub["messages"] + '","publishType":"' + pub[
+                                   "publishType"] + '","journalname":"' + pub["journalname"] + '","date":"' + pub[
+                                   "date"] + '","index":"' + pub["index"] + '"},'
+                message = message.strip(',')
+                message = '{"fields":[' + message + ']}'
+                return HttpResponse(json.dumps(message), content_type='application/json')
+            else:
+                try:
+                    records = PubToUser.objects.all()
+                    list=[]
+                    a=author.lower()
+                    for record in records:
+                        r=record.username.lower()
+                        if record.pubID not in list and ( a in r ):
+                            list.append(record.pubID)
+
+                    # pubIDs = PubToUser.objects.filter(username=author)
+                    # if pubIDs.count() == 0:
+                    #     print "0000"
+                    #     message = '{"warning":"0"}'
+                    #     return HttpResponse(json.dumps(message), content_type='application/json')
+                    message = ""
+                    pub = {}
+                    # list=[]
+                    # for pubID in pubIDs:
+                    #     if pubID.pubID not in list:
+                    #         list.append(pubID.pubID)
+                    print list
+                    for item in list:
+                        publication = Publications.objects.get(pubID=item)
+                        pub["title"]=str(publication.title)
+                        pub["link"] = str(publication.link)
+                        pub["authors"] = str(publication.authors)
+                        pub["messages"] = str(publication.messages)
+                        pub["journalname"] = str(publication.journalname)
+                        pub["date"] = str(publication.date)
+                        pub["publishType"] = str(publication.publishType.encode('utf-8'))
+                        pub["index"] = str(publication.index)
+                        message += '{"title":"' + pub["title"] + '","link":"' + pub["link"] + '","authors":"' + pub["authors"] + '","messages":"' + pub["messages"]+ '","publishType":"' + pub["publishType"] + '","journalname":"' + pub["journalname"] + '","date":"' + pub["date"] + '","index":"' + pub["index"] + '"},'
+                    message = message.strip(',')
+                    message = '{"fields":['+message+']}'
+                    return HttpResponse(json.dumps(message), content_type='application/json')
+                except ValidationError as e:
+                    message = JsonResponse({"warning":e})
+                    return message
+            # if title !='' and author=='':
+            #     try:
+            #         publications = Publications.objects.filter(title=title)
+            #         for publication in publications:
+            #             message = message+"{'title':'"+publication.title+"','authors':'"+publication.authors+"','messages':'"+publication.messages+"','publishType':'"+publication.publishType+"','journalname':'"+publication.journalname+"','date':'"+publication.date+"','index':'"+publication.index+"'},"
+            #         message=message+"}"
+            #         print message
+            #         return HttpResponse(json.dumps(message), content_type='application/json')
+            #     except ValidationError as e:
+            #             message = JsonResponse({"warning":e})
+            #             return message
+            #
+
+
 
 
 def admin(request):
@@ -249,12 +339,11 @@ def index(request):
             for author in authorArr:
                 try:
                     PubToUser.objects.create(pubID = pubID,username=author)
-                    uploadMessage = '文件上传成功'
-                    publications = Publications.objects.filter()
-                    return render_to_response('index.html', locals())
                 except ProgrammingError as e:
                     return render(request, 'index.html', {'uploadError': 'PubToUser数据表错误：' + e})
-
+            uploadMessage = '文件上传成功'
+            publications = Publications.objects.filter()
+            return render_to_response('index.html', locals())
     if Publications.objects.last():
         if Publications.objects.last().pubID>0:
             publications = Publications.objects.all()
@@ -346,6 +435,8 @@ def write(request):
         title = request.POST.get('title','')
         content = request.POST.get('content','')
         publish = request.POST.get('publish','')
+        editdatetime = datetime.datetime.now().date()
+        print editdatetime
         #加入判断题目是否相同
         isHave = Articles.objects.filter(title=title)
         isNew = request.POST.get('isNew')
@@ -356,8 +447,7 @@ def write(request):
         else:
             if isNew == '0':
                 try:
-                    Articles.objects.filter(title=oldtitle).update(title=title,content=content,publish=publish)
-                    print "jaja"
+                    Articles.objects.filter(title=oldtitle).update(title=title,content=content,publish=publish,editDateTime = editdatetime)
                     if publish == '0':
                         response = JsonResponse({"warning": "文章更新已保存，尚未发布"})
                         return response
@@ -378,8 +468,7 @@ def write(request):
                 return response
             else:
                 try:
-                    Articles.objects.create(articleID=articleID, authorID=authorID, title=title, content=content,
-                                            publish=publish)
+                    Articles.objects.create(articleID=articleID, authorID=authorID, title=title, content=content,publish=publish,editDateTime=editdatetime)
                     if publish == '0':
                         response = JsonResponse({"warning": "文章保存成功"})
                     else:

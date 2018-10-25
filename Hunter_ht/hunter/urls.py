@@ -12,6 +12,9 @@ urlpatterns = [
     url(r'^operator/$', views.operator),
     url(r'^upload/$',views.upload),
     url(r'^write/$',views.write),
-    url(r'^index/view/',views.view),
+    url(r'^home/view/',views.view),
+    url(r'^search/',views.search),
+    url(r'^view/',views.view),
     url(r'^/static/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
+    url(r'^home/static/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
 ]

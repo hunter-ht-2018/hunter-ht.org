@@ -17,6 +17,7 @@
 
     <nav class="navbar" >
         <div id="hunterLogo">Hunter</div>
+        <a class="logout" onclick="logout()">EXIT</a>
         <div id="adminname" ></div>
     </nav>
     <div id="leftBar">
@@ -42,7 +43,7 @@
 		    	</tbody>
 		    </table>
     </div>
-    <div id="useradmin" class="userlist" onclick="change(this)">
+    <div id="useradmin" class="userlist" ">
         <div  class="adminForm">
             <div id="adduserform" class="form-horizontal"  >
                 <div class="form-group">
@@ -109,6 +110,11 @@
                 window.location.href="/signin/";
             }
         });
+        function logout() {
+            var storage = window.sessionStorage;
+            storage.clear();
+            window.location.href="/signin/";
+        }
 
         function change(thisbtn){
             var divname = $(thisbtn).attr('id');

@@ -63,14 +63,16 @@ a:active{
     font-size: 18px;
     line-height: 20px;
 }
-#username{
+#username,.logout{
 	float: right;
 	color:#ea6f5a;
     height: 50px;
     padding: 15px 15px;
     font-size: 18px;
     line-height: 20px;
-	float: right;
+}
+.logout{
+	cursor:pointer;
 }
 ul{
 	width:90%;
@@ -214,7 +216,6 @@ span{
 		background-color: #1b1e21;
 		color:#ea6f5a;
 	}
-
 }
 svg{
 	width:100%;
@@ -235,7 +236,7 @@ svg{
 }
 .article-content > p{
 	float: left;
-	width:80%;
+	width:70%;
 	height:30px;
 	overflow:hidden;
 }

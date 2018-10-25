@@ -353,7 +353,7 @@ footer p{
 }
 .node-list > li{
 	list-style: none;
-	margin:10px;
+	margin:50px;
 }
 .title{
 	margin:0;
@@ -407,13 +407,38 @@ footer p{
 	height:30px;
 	margin-left:0px;
 }
+#searchBtn{
+	width: 30px;
+    height: 20px;
+    line-height: 20px;
+    padding-top: 0px;
+    outline: none;
+    border: none;
+    background-color: white
+}
 svg{
 	width:100%;
 	height:100%;
 }
-.article-content > p{
-	width:600px;
+.article-content > .abstract{
+	width:80%;
 	height:30px;
+	float: left;
 	line-height: 30px;
 	overflow: hidden;
+}
+.artdate{
+	float:right;
+	line-height: 30px;
+}
+#byauthor{
+	width:200px;
+	z-index: 1;
+	padding-left: 5px;
+	border: solid 1px #00000054;
+    border-radius: 2px;
+    background-color: snow;
+}
+option{
+	border-top:solid 1px grey;
 }
