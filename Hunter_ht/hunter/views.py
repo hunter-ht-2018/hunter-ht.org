@@ -78,11 +78,19 @@ def search(request):
                 try:
                     records = PubToUser.objects.all()
                     list=[]
-                    a=author.lower()
+                    a=author.lower().strip()
+                    a_revert = ''
+                    if ' ' in a:
+                        a_revert= a.split(' ')[1]+a.split(' ')[0]
                     for record in records:
-                        r=record.username.lower()
-                        if record.pubID not in list and ( a in r ):
-                            list.append(record.pubID)
+                        r=record.username.lower().strip()
+                        r_none_space = r.replace(' ','')
+                        r_revert = ''
+                        if ' ' in r:
+                            r_revert = r.split(' ')[1]+r.split(' ')[0]
+                        if record.pubID not in list:
+                            if (a in r) or (a_revert!=''  and a_revert in r_none_space) or (a in r_none_space) or (a in r_revert):
+                                list.append(record.pubID)
 
                     # pubIDs = PubToUser.objects.filter(username=author)
                     # if pubIDs.count() == 0:
@@ -95,7 +103,6 @@ def search(request):
                     # for pubID in pubIDs:
                     #     if pubID.pubID not in list:
                     #         list.append(pubID.pubID)
-                    print list
                     for item in list:
                         publication = Publications.objects.get(pubID=item)
                         pub["title"]=str(publication.title)
