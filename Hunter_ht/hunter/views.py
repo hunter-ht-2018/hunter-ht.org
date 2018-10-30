@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 #encoding=utf8
 from django.shortcuts import render
-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 # Create your views here.
 
 from django.http import JsonResponse
@@ -89,7 +91,7 @@ def search(request):
                         if ' ' in r:
                             r_revert = r.split(' ')[1]+r.split(' ')[0]
                         if record.pubID not in list:
-                            if (a in r) or (a_revert!=''  and a_revert in r_none_space) or (a in r_none_space) or (a in r_revert):
+                            if (a in r) or (a_revert !='' and a_revert in r_none_space) or (a in r_none_space) or (a in r_revert):
                                 list.append(record.pubID)
 
                     # pubIDs = PubToUser.objects.filter(username=author)
@@ -308,14 +310,14 @@ def index(request):
         myfile = request.FILES.get('myfile', None)
         str='，'.decode('utf-8')
         authors = authors.replace(str,',')
-        type=request.POST.get('type')
+        types=request.POST.get('type')
         journalname= request.POST.get('journalname')
         date= request.POST.get('date')
         index= request.POST.get('index')
         message = {}
         if not authors:
             return render(request, 'index.html',{'uploadMessage':'请按要求填写论文作者'})
-        if type=='0':
+        if types=='0':
             return render(request, 'index.html',{'uploadMessage':'请选择出版类型'})
         if not myfile:
             return render(request, 'index.html',{'uploadError':'未选择任何文件'})
@@ -339,7 +341,8 @@ def index(request):
             dest.close()
             link=os.path.join('static','publications',myfile.name)
             try:
-                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors, publishType=type, journalname=journalname,date=date,index=index)
+                print types
+                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors, publishType=types.encode('utf-8'), journalname=journalname,date=date,index=index)
             except ProgrammingError as e:
                 return render(request, 'index.html', {'uploadError':'Publications表错误：' + e})
             authorArr = authors.split(',')
@@ -448,6 +451,8 @@ def write(request):
         isHave = Articles.objects.filter(title=title)
         isNew = request.POST.get('isNew')
         oldtitle=request.POST.get('oldtitle')
+        print isHave
+        print isNew
         if isHave and isNew=='1':
             response = JsonResponse({"warning":"该文章题目已存在"})
             return response

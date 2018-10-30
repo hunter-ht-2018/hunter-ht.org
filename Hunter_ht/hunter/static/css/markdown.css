@@ -1,6 +1,5 @@
 *{
 	margin:0;
-	padding:0;
 }
 body{
 	overflow: hidden;
@@ -21,6 +20,7 @@ blockquote {
 }
 ul li {
     line-height: 20px;
+	list-style: circle;
 }
 code {
 	background-color: rgba(0,0,0,.05);
