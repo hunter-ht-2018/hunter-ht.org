@@ -33,7 +33,7 @@ code {
 /* Markdown解析样式 */
 
 a{
-	color:#ea6f5a;
+	color:#FF9800;
 	text-decoration: none;
 	transition: ease-in-out color .5s;
 }
@@ -45,7 +45,7 @@ a:hover{
 
 .navbar{
 	background-color: black;
-	color: #ea6f5a;
+	color: #FF9800;
 }
 #username{
 	width:100px;

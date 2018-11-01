@@ -8,6 +8,7 @@ class User(models.Model):
     pwd = models.CharField(max_length=100)
     nake_name = models.CharField(max_length=50)
     identity = models.CharField(max_length=1, default='0')
+    introduction = models.TextField(default="No Information")
 
 class Publications(models.Model):
     pubID = models.BigIntegerField(primary_key=True)

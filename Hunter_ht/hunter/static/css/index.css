@@ -3,7 +3,7 @@
 	padding:0;
 }
 a{
-	color:#ea6f5a;
+	color:#FF9800;
 	text-decoration: none;
 	transition: ease-in-out color .5s;
 }
@@ -12,7 +12,12 @@ a:hover{
 	color:#c59a6d;
 	transition: ease-in-out color .5s;
 }
-
+.logo{
+	font-size: 20px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-style: italic;
+	color:#FF9800;
+}
 button{
 	outline:none;
 }
@@ -30,7 +35,7 @@ a:active{
 	background-color: black;
 }
 .navbar-default .navbar-brand{
-	color:#ea6f5a;
+	color:#FF9800;
 }
 .head{
 	width:100%;
@@ -42,22 +47,9 @@ a:active{
 	margin: 0px;
 }
 
-.logo{
-	width:200px;
-	height:60px;
-	display: block;
-	text-align: center;
-	line-height: 60px;
-	color:#DCDCDC;
-	/*color:#c59a6d;*/
-	font-size: 40px;
-	font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
-	position: fixed;
-	float: left;
-}
 .write-btn{
 	float: right;
-	color:#ea6f5a;
+	color:#FF9800;
     height: 50px;
     padding: 15px 15px;
     font-size: 18px;
@@ -65,14 +57,30 @@ a:active{
 }
 #username,.logout{
 	float: right;
-	color:#ea6f5a;
-    height: 50px;
+    height: 100%;
     padding: 15px 15px;
     font-size: 18px;
+	margin-top:2px;
     line-height: 20px;
+}
+#username{
+	width:auto;
+	text-align: center;
+	font-size: 24px;
+    font-style: italic;
+	background-color: #ff9800;
+}
+#username > a{
+	color: black;
+	text-decoration: none;
+}
+#username > a:hover{
+	color: whitesmoke;
+	text-decoration: none;
 }
 .logout{
 	cursor:pointer;
+	color:#FF9800;
 }
 ul{
 	width:90%;
@@ -88,13 +96,13 @@ li{
 	height: 60px;
 	text-align: left;
 	line-height: 60px;
-	color:#ea6f5a;
+	color:#FF9800;
 	font-size: 16px;
 	font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
 	float: left;
 }
 .active  {
-	color:#ea6f5a; 
+	color:#FF9800;
 }
 span{
 	height:24px;
@@ -102,7 +110,7 @@ span{
 	top:-5px;
 }
 .navbar-default .navbar-nav > li > a {
-    color: #ea6f5a;
+    color: #FF9800;
 }
 .navbar-nav > li > a :hover{
 	    color:#c59a6d;
@@ -113,9 +121,9 @@ span{
 }*/
 
 .content-two{
-	height: 800px; 
+	height: 900px;
 	border-radius: 10px;
-	margin-top: 100px;
+	margin-top: 150px;
 	position: relative;
 	overflow: hidden;
 }
@@ -214,7 +222,7 @@ span{
 	.upload-btn >button{
 		width:100px;
 		background-color: #1b1e21;
-		color:#ea6f5a;
+		color:#FF9800;
 	}
 }
 svg{

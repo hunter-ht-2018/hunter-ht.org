@@ -14,10 +14,10 @@
     <nav class="navbar navbar-default navbar-fixed-top " role="navigation">
       <div class="width-limit">
         <!-- logo on left -->
-        <a class="navbar-brand nav-title" href="#">Hunter</a>
+        <a class="navbar-brand nav-title logo" href="#">HUNTER</a>
         <!-- logo on right -->
           <a class="logout" onclick="logout()">EXIT</a>
-        <div id="username"></div>
+        <div title="查看与编辑我的信息" id="username"></div>
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
@@ -233,7 +233,8 @@
             var storage=window.sessionStorage;
             var username=storage.username;
             if(username != null&&username.toString().length>0){
-                $("#username").text(username);
+                var usernameHTMl='<a target="_blank" href="/edit/'+username+'.html">'+username+'</a>';
+                document.getElementById('username').innerHTML=usernameHTMl;
             }else{
                 alert("请先登录");
                 window.location.href="/signin/";

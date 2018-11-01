@@ -493,3 +493,40 @@ def write(request):
             return response
 
     return render(request,'write.html')
+
+def personal(request):
+    if request.is_ajax():
+        username = request.POST.get("username")
+        print username
+        introduction="No Information"
+        if User.objects.filter(name=username):
+            introduction=User.objects.get(name=username).introduction
+        response = JsonResponse({"details":introduction})
+        print introduction
+        return response
+    return render(request,'personal.html')
+
+def editPro(request):
+    if request.is_ajax():
+        action = request.POST.get("action")
+        if action == "1":
+            username = request.POST.get("username")
+            print username
+            introduction="No Information"
+            if User.objects.filter(name=username):
+                introduction=User.objects.get(name=username).introduction
+            response = JsonResponse({"details":introduction})
+            print introduction
+            return response
+        if action=="2":
+            username = request.POST.get("username")
+            introduction = request.POST.get("details")
+            try:
+                User.objects.filter(name=username).update(introduction = introduction)
+                response=JsonResponse({"results":"1"})
+                return response
+            except ProgrammingError as e:
+                response = JsonResponse({"results":e})
+                return response
+    return render(request,'editPro.html')
+
