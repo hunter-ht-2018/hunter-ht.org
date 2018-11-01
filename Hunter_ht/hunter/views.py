@@ -292,10 +292,20 @@ def index(request):
             username = request.GET.get('user')
             userID = User.objects.get(name=username).userID
             articles = Articles.objects.filter(authorID = userID)
-            print articles
+            print articles[0].articleID
             articles = serializers.serialize("json",articles)
             print articles
             return HttpResponse(articles)
+        if 'articleID' in request.GET:
+            articleID = request.GET.get('articleID')
+            article = Articles.objects.get(articleID=articleID)
+            authorID=Articles.objects.get(articleID=articleID).authorID
+            authorname = User.objects.get(userID=authorID).name
+            jsonStr = '{"title":"'+article.title+'","content":"'+article.content+'","authorname":"'+authorname+'"}'
+            print jsonStr
+            # response = JsonResponse(jsonStr)
+            # return response
+            return HttpResponse(json.dumps(jsonStr), content_type='application/json')
     if request.is_ajax():
         title = request.POST.get('title')
         try:
