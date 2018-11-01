@@ -10,6 +10,7 @@
 	<link href="../static/css/home.css" rel="stylesheet">
     <script src="../static/js/jquery-1.9.1.min.js"></script>
     <script src="../static/js/jquery.form.js"></script>
+	<script type="text/javascript" src="../../static/js/showdown.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default site-header navbar-fixed-top py-1" role="navigation">
@@ -165,17 +166,23 @@
 {#		      <span></span>#}
 {#		    </div>#}
 		    <div id="list-container">
-		    	<ul class="node-list">
+		    	<ul id="articleList" class="node-list">
                     {% for article in articles %}
 		    		<li>
 		    			<div class="article-content">
-		    				<a class="title" target="_blank" href="view/?title={{ article.title }}">{{ article.title }}</a>
+		    				<button class="title" onclick="getArticle({{ article.articleID }})">{{ article.title }}</button>
 		    				<p class="abstract">{{ article.content }}</p>
                             <p class="artdate">{{ article.editDateTime }}</p>
 		    			</div>
 		    		</li>
                     {% endfor %}
 		    	</ul>
+                <div id="articleView" class="hide">
+                    <button class="lastStep" onclick="returnToList()"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1541063213171" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2135" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M939.880137 487.72513l-782.215258 0 358.804922-318.92975c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.505595-42.367947-2.492774L64.602344 490.13911c-6.407943 5.693676-10.073426 13.858636-10.073426 22.430872s3.665483 16.737196 10.073426 22.430872l411.993309 366.204449c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947L169.687704 548.100196 939.880137 548.100196c16.57449 0 30.011524-13.613042 30.011524-30.187533S956.454628 487.72513 939.880137 487.72513z" p-id="2136" fill="#FF9800"></path></svg></button>
+                    <div id="artTitle"><h1></h1></div>
+                    <div id="authorName"></div>
+                    <div id="artContent"></div>
+                </div>
 		    </div>
      	</section>
      </div>
@@ -255,6 +262,38 @@
                     console.error('Something went wrong....');
                 }
             });
+        }
+        function getArticle (articleID){
+            $.ajax({
+                url:'/index/',
+                type:'get',
+                data:{
+                    "articleID":articleID,
+                },
+                success:function(response){
+                    result = $.parseJSON(response);
+
+                    $("#articleList").addClass("hide");
+                    $("#articleView").removeClass("hide");
+
+                    var converter = new showdown.Converter();
+                    var content = converter.makeHtml(result["content"]);
+                    $("#artContent").empty();
+                    $("#artContent").append(content);
+                    $("#artTitle").empty();
+                    $("#artTitle").append(result["title"]);
+                    $("#authorName").empty();
+                    $("#authorName").append(result["authorname"]);
+
+                },
+                error:function (xhr) {
+                    console.error('something went wrong...');
+                }
+            })
+        }
+        function returnToList() {
+            $("#articleList").removeClass("hide");
+            $("#articleView").addClass("hide");
         }
         function changeSectionHeight(){
         	var body = document.getElementsByTagName('body')[0];

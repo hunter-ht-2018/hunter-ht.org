@@ -30,6 +30,17 @@ import datetime
 
 
 def home(request):
+    if request.method=="GET":
+        if 'articleID' in request.GET:
+            articleID = request.GET.get('articleID')
+            article = Articles.objects.get(articleID=articleID)
+            authorID=Articles.objects.get(articleID=articleID).authorID
+            authorname = User.objects.get(userID=authorID).name
+            jsonStr = '{"title":"'+article.title+'","content":"'+article.content+'","authorname":"'+authorname+'"}'
+            print jsonStr
+            # response = JsonResponse(jsonStr)
+            # return response
+            return HttpResponse(json.dumps(jsonStr), content_type='application/json')
     if not Publications.objects.last():
         return render(request, 'home.html')
     else:
@@ -44,6 +55,7 @@ def home(request):
             for publication in publications:
                 print publication.pubID
             return render_to_response('home.html',locals())
+
     return render(request, 'home.html')
 
 def search(request):
