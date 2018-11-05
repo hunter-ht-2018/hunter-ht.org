@@ -45,8 +45,8 @@ def home(request):
         return render(request, 'home.html')
     else:
         if Publications.objects.last().pubID > 0:
-            publications = Publications.objects.all()
-            articles = Articles.objects.filter(publish="1")
+            publications = Publications.objects.order_by("date").all().reverse()
+            articles = Articles.objects.filter(publish="1").order_by("editDateTime").reverse()
             names = PubToUser.objects.values('username')
             pubAuthors=[]
             for name in names:
@@ -71,7 +71,7 @@ def search(request):
             if author == 'All' or author=='':
                 pub={}
                 message=""
-                publications=Publications.objects.all()
+                publications=Publications.objects.order_by("date").all().reverse()
                 for publication in publications:
                     pub["title"] = str(publication.title)
                     pub["link"] = str(publication.link)
@@ -134,20 +134,6 @@ def search(request):
                 except ValidationError as e:
                     message = JsonResponse({"warning":e})
                     return message
-            # if title !='' and author=='':
-            #     try:
-            #         publications = Publications.objects.filter(title=title)
-            #         for publication in publications:
-            #             message = message+"{'title':'"+publication.title+"','authors':'"+publication.authors+"','messages':'"+publication.messages+"','publishType':'"+publication.publishType+"','journalname':'"+publication.journalname+"','date':'"+publication.date+"','index':'"+publication.index+"'},"
-            #         message=message+"}"
-            #         print message
-            #         return HttpResponse(json.dumps(message), content_type='application/json')
-            #     except ValidationError as e:
-            #             message = JsonResponse({"warning":e})
-            #             return message
-            #
-
-
 
 
 def admin(request):
@@ -160,6 +146,7 @@ def admin(request):
                 else:
                     user.identity = '管理员'
             return render_to_response('admin.html',locals())
+
 def operator(request):
     message={}
     if request.is_ajax():
@@ -228,7 +215,6 @@ def operator(request):
                 message["warning"]="权限更改错误"
                 message["flag"]="1";
                 return HttpResponse(json.dumps(message), content_type='application/json')
-
     return render_to_response('admin.html', locals())
 
 def add_user(request):
@@ -237,13 +223,9 @@ def add_user(request):
         password = request.POST.get('password')
         message={}
         if username == '' or password == '':
-            # message["warning"]="用户名或密码不能为空"
-            # response = JsonResponse({"message": "用户名或密码不能为空"})
             return render(request, 'admin.html', {'message': '用户名或密码不能为空'})
         result = User.objects.filter(name=username)
         if result:
-            # message["warning"] = "用户名已存在"
-            # response = JsonResponse({"message": "用户名已存在"})
             return render(request, 'admin.html',{'message':'用户名已存在'})
         if User.objects.last() is None:
             userID = 1
@@ -251,26 +233,10 @@ def add_user(request):
             userID = User.objects.last().userID + 1
         userAdd=User.objects.create(userID=userID, name=username, pwd=password)
         if userAdd:
-            # message["warning"]="添加成功"
             return render(request, 'admin.html',{'message':'添加成功'})
         else:
-            # message["warning"]="添加失败"
             return render(request, 'admin.html',{'message':'添加失败'})
-        # try:
-        #     User.objects.create(userID=userID, name=username, pwd=password)
-            # response = JsonResponse({"message": "添加成功"})
-            # return HttpResponse(json.dumps(message), content_type='application/json')
-        # except ValidationError as e:
-        #     message["warning"] = e
-            # response = JsonResponse({"message": e})
     return render(request, 'admin.html')
-
-
-# def delete_user(request):
-#     if request.is_ajax():
-#         username = request.POST.get('username')
-
-
 
 def signin(request):
     if request.is_ajax():
@@ -303,10 +269,8 @@ def index(request):
         if 'user' in request.GET:
             username = request.GET.get('user')
             userID = User.objects.get(name=username).userID
-            articles = Articles.objects.filter(authorID = userID)
-            print articles[0].articleID
+            articles = Articles.objects.filter(authorID = userID).order_by("editDateTime").reverse()
             articles = serializers.serialize("json",articles)
-            print articles
             return HttpResponse(articles)
         if 'articleID' in request.GET:
             articleID = request.GET.get('articleID')
@@ -314,9 +278,6 @@ def index(request):
             authorID=Articles.objects.get(articleID=articleID).authorID
             authorname = User.objects.get(userID=authorID).name
             jsonStr = '{"title":"'+article.title+'","content":"'+article.content+'","authorname":"'+authorname+'"}'
-            print jsonStr
-            # response = JsonResponse(jsonStr)
-            # return response
             return HttpResponse(json.dumps(jsonStr), content_type='application/json')
     if request.is_ajax():
         title = request.POST.get('title')
@@ -378,11 +339,11 @@ def index(request):
             return render_to_response('index.html', locals())
     if Publications.objects.last():
         if Publications.objects.last().pubID>0:
-            publications = Publications.objects.all()
+            publications = Publications.objects.order_by("date").all().reverse()
             return render_to_response('index.html',locals())
     return render(request, 'index.html')
 
-
+#此段可删：已经与index、home整合。文章查看不再跳转
 def view(request):
     if request.method=="GET":
         if 'title' in request.GET:
