@@ -44,8 +44,57 @@
 		var height = window.innerHeight;
 		$('#markdownCnt').css("height",height*0.88);
         getUsername();
-        compile()
-    });
+        compile();
+        //拖离
+        document.addEventListener('dragleave',function(e){e.preventDefault();});
+        //拖后放
+        document.addEventListener('drop',function(e){e.preventDefault();});
+        //拖进
+        document.addEventListener('dragenter',function(e){e.preventDefault();});
+        //拖来拖去
+        document.addEventListener('dragover',function(e){e.preventDefault();});
+        var boxImg = document.getElementById("originCnt");
+        boxImg.addEventListener("drop",function(e){
+            e.preventDefault();
+            var fileList = e.dataTransfer.files;
+            if(fileList.length==0){return false;}
+            else if(fileList.length>1){
+                console.log("暂不支持多图同时上传");
+                return false;
+            }
+            else if(fileList[0].type.indexOf('image')===-1){
+                alert("请拖图片好不");
+                return false;
+            }
+            else{
+                console.log(fileList[0].name);
+                var formData = new FormData();
+                formData.append('image', fileList[0])
+                $.ajax({
+                    type:"post",
+                    url:'/uploadImg/',//ajaxurl
+                    async:false,
+                    dataType:"text",
+                    data:formData,
+                    processData : false,
+                    contentType : false,
+                    success:function(data){
+                        if(data){
+                            var addMDHTML='!['+fileList[0].name+']('+data+')';
+                            console.log(addMDHTML);
+　　　　　　　　　　　　　　　　  $("#originCnt").val($("#originCnt").val()+addMDHTML);
+                            compile();
+                        }else{
+                           console.log(data)
+                        }
+                    },error:function(e){
+                        console.log(e)
+                    }
+                });
+            }
+
+        });
+    },false);
     $(function() {
             $('#save-icon').click(function() {
                 save('/write/');  // Jsencrypt.do对应服务端处理地址

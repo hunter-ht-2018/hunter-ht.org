@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^admin/$',views.admin),
     url(r'^operator/$', views.operator),
     url(r'^upload/$',views.upload),
+    url(r'^uploadImg/$',views.uploadImg),
     url(r'^write/$',views.write),
     url(r'^home/view/',views.view),
     url(r'^search/',views.search),

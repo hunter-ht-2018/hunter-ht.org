@@ -477,6 +477,19 @@ def write(request):
 
     return render(request,'write.html')
 
+def uploadImg(request):
+    file_obj = request.FILES.get("image")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(BASE_DIR, 'hunter', 'static', 'articles','mdImage', file_obj.name)
+    link_path = os.path.join('/static', 'articles','mdImage', file_obj.name)
+    print "哈哈"
+    with open(file_path,'wb') as f:
+        print "写文件"
+        for chunk in file_obj.chunks():
+            f.write(chunk)
+    return HttpResponse(link_path)
+
+
 def personal(request):
     if request.is_ajax():
         username = request.POST.get("username")

@@ -2,6 +2,39 @@
 	margin:0;
 	padding:0;
 }
+
+/* Markdown解析样式 */
+blockquote {
+    color: rgba(0,0,0,.5);
+    padding-left: 1.5em;
+    border-left: 5px solid rgba(0,0,0,.1);
+}
+blockquote {
+    display: block;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 40px;
+	-webkit-margin-end: 40px;
+}
+.content > ul li {
+    line-height: 20px;
+	list-style: circle;
+}
+code {
+	background-color: rgba(0,0,0,.05);
+    display: block;
+    padding: .5em;
+    -webkit-text-size-adjust: none;
+    overflow-x: auto;
+    white-space: pre;
+}
+img{
+	width: 80%;
+    margin: 0 auto;
+    display: block;
+}
+/* Markdown解析样式 */
+
 a{
 	color:#FF9800;
 	text-decoration: none;
@@ -30,16 +63,7 @@ button{
 button:hover{
 	color:#c59a6d;
 }
-/*a:visited{
-	text-decoration: none;
-	color:white;
-	transition: ease-in-out color .5s;
-}
-a:active{
-	text-decoration: none;
-	color:white;
-	transition: ease-in-out color .5s;
-}*/
+
 .width-limit{
 	background-color: black;
 }
@@ -255,7 +279,7 @@ svg{
 .article-content > p{
 	float: left;
 	width:70%;
-	height:30px;
+	height:20px;
 	overflow:hidden;
 }
 .article-content > a{

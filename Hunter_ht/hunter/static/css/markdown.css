@@ -30,7 +30,14 @@ code {
     overflow-x: auto;
     white-space: pre;
 }
+img{
+	width: 80%;
+    margin: 0 auto;
+    display: block;
+}
 /* Markdown解析样式 */
+
+
 
 a{
 	color:#FF9800;
