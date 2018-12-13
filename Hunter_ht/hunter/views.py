@@ -45,7 +45,7 @@ def home(request):
         return render(request, 'home.html')
     else:
         if Publications.objects.last().pubID > 0:
-            publications = Publications.objects.order_by("date").all().reverse()
+            publications = Publications.objects.filter(isOpen="1").order_by("date").all().reverse()
             articles = Articles.objects.filter(publish="1").order_by("editDateTime").reverse()
             names = PubToUser.objects.values('username')
             pubAuthors=[]
@@ -140,6 +140,7 @@ def admin(request):
     if User.objects.last():
         if User.objects.last().userID > 0:
             users = User.objects.all()
+            publications = Publications.objects.all()
             for user in users:
                 if user.identity=='0':
                     user.identity = '普通用户'
@@ -207,7 +208,6 @@ def operator(request):
             username = request.POST.get('username')
             try:
                 User.objects.filter(name=username).update(identity=identity)
-                print (identity)
                 message["flag"]="1";
                 message["warning"]="权限更改成功"
                 return HttpResponse(json.dumps(message), content_type='application/json')
@@ -215,6 +215,26 @@ def operator(request):
                 message["warning"]="权限更改错误"
                 message["flag"]="1";
                 return HttpResponse(json.dumps(message), content_type='application/json')
+        if actiontype == '4':
+            pubtitle = request.POST.get('delpub')
+            pubFileName = request.POST.get('pubFileName')
+            print pubtitle
+            BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            destination = os.path.join(BASE_DIR, 'hunter', 'static', 'publications', pubFileName)
+            try:
+                pubIDs=Publications.objects.filter(title=pubtitle).all().values("pubID")
+                print pubIDs
+                for pubID in pubIDs:
+                    print pubID['pubID']
+                    PubToUser.objects.filter(pubID=pubID['pubID']).delete()
+                Publications.objects.filter(title=pubtitle).delete()
+                if os.path.exists(destination):
+                    os.remove(destination)
+                message["warning"]="1"
+                return HttpResponse(json.dumps(message),content_type='application/json')
+            except:
+                message["warning"]="2"
+                return HttpResponse(json.dumps(message),content_type='application/json')
     return render_to_response('admin.html', locals())
 
 def add_user(request):
@@ -291,12 +311,19 @@ def index(request):
     if request.POST:
         authors=request.POST.get('authors','')
         myfile = request.FILES.get('myfile', None)
-        str='，'.decode('utf-8')
-        authors = authors.replace(str,',')
+        str_r='，'.decode('utf-8')
+        authors = authors.replace(str_r,',')
         types=request.POST.get('type')
         journalname= request.POST.get('journalname')
         date= request.POST.get('date')
         index= request.POST.get('index')
+        if request.POST.get('index'):
+            index = request.POST.get('index')
+        else:
+            index=" "
+        print "index:"+index
+        isOpen = request.POST.get('isOpen')
+        uploadBy = request.POST.get('recordname')
         message = {}
         if not authors:
             return render(request, 'index.html',{'uploadMessage':'请按要求填写论文作者'})
@@ -325,7 +352,7 @@ def index(request):
             link=os.path.join('static','publications',myfile.name)
             try:
                 print types
-                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors, publishType=types.encode('utf-8'), journalname=journalname,date=date,index=index)
+                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors, publishType=types.encode('utf-8'), journalname=journalname,date=date,indexType=index,isOpen=isOpen,uploadByUser=uploadBy)
             except ProgrammingError as e:
                 return render(request, 'index.html', {'uploadError':'Publications表错误：' + e})
             authorArr = authors.split(',')
@@ -335,13 +362,69 @@ def index(request):
                 except ProgrammingError as e:
                     return render(request, 'index.html', {'uploadError': 'PubToUser数据表错误：' + e})
             uploadMessage = '文件上传成功'
-            publications = Publications.objects.filter()
+            publications =  Publications.objects.order_by("date").all().reverse()
             return render_to_response('index.html', locals())
     if Publications.objects.last():
         if Publications.objects.last().pubID>0:
             publications = Publications.objects.order_by("date").all().reverse()
+            for pub in publications:
+                pub.date=str(pub.date)
+                print pub.date
             return render_to_response('index.html',locals())
     return render(request, 'index.html')
+
+
+def operatePub(request):
+    if request.is_ajax():
+        operateType = request.POST.get("operateType");
+        if operateType == "0":
+            title=request.POST.get("title")
+            ifOpen=request.POST.get("ifOpen")
+            print title
+            print ifOpen
+            try:
+                pubs = Publications.objects.filter(title=title)
+                print pubs
+                Publications.objects.filter(title=title).update(isOpen=ifOpen)
+                response=JsonResponse({"warning":"更改成功"})
+            except:
+                response = JsonResponse({"warning": "更改失败"})
+            return response
+        if operateType == "1":
+            pubFileName = request.POST.get("pubFileName")
+            pubTitle = request.POST.get("pubTitle")
+            BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            destination = os.path.join(BASE_DIR, 'hunter', 'static', 'publications', pubFileName)
+            try:
+                pubIDs = Publications.objects.filter(title=pubTitle).all().values("pubID")
+                for pubID in pubIDs:
+                    PubToUser.objects.filter(pubID=pubID['pubID']).delete()
+                Publications.objects.filter(title=pubTitle).delete()
+                if os.path.exists(destination):
+                    os.remove(destination)
+                response = JsonResponse({"warning":"删除成功"})
+            except:
+                response = JsonResponse({"warning":"删除出错"})
+            return response
+        if operateType=="2":
+            title = request.POST.get("title")
+            authors = request.POST.get("author")
+            date = request.POST.get("date")
+            journalName = request.POST.get("pubName")
+            index = request.POST.get("index")
+            pubType = request.POST.get("pubType")
+            pubID=Publications.objects.get(title=title).pubID
+            PubToUser.objects.filter(pubID=pubID).delete()
+            authorArr = authors.split(',')
+            for author in authorArr:
+                try:
+                    PubToUser.objects.create(pubID=pubID, username=author)
+                except:
+                    response = JsonResponse({"warning":"修改失败"})
+                    return response
+            Publications.objects.filter(title=title).update(authors=authors, publishType=pubType.encode('utf-8'),date=date,journalname=journalName, indexType=index)
+            response=JsonResponse({"warning":"修改成功"})
+            return response
 
 #此段可删：已经与index、home整合。文章查看不再跳转
 def view(request):
@@ -398,7 +481,7 @@ def upload(request):
             dest.close()
             link=os.path.join('static','publications',myfile.name)
             try:
-                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors,journalname=journalname,date=date,index=index)
+                Publications.objects.create(pubID=pubID, title=title,link=link, messages='kidding', authors = authors,journalname=journalname,date=date,indexType=index)
             except ProgrammingError as e:
                 # message["warning"] = "Publications表错误:"+e
                 # return HttpResponse(json.dumps(message), content_type='application/json')
@@ -509,6 +592,7 @@ def editPro(request):
             username = request.POST.get("username")
             print username
             introduction="No Information"
+            print introduction
             if User.objects.filter(name=username):
                 introduction=User.objects.get(name=username).introduction
             response = JsonResponse({"details":introduction})

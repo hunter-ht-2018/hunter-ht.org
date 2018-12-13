@@ -42,6 +42,20 @@ a{
 button{
     outline: none;
 }
+.showlink{
+    width:100px;
+    height: auto;
+    right:50px;
+    position:absolute;
+}
+.showlink > a{
+    font-size: 14px;
+    color:blue;
+    font-style: italic;
+}
+.showlink > a:hover{
+    color:lightblue;
+}
 .head{
     width:1000px;
     height:50px;

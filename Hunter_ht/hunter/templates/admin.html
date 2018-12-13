@@ -23,27 +23,38 @@
     <div id="leftBar">
         <ul>
             <li id="useradminLi" onclick="change(this)" style="background-color:navajowhite">用户管理</li>
-            <li id="setadminLi" onclick="change(this)">权限设置</li>
+            <li id="paperadminLi" onclick="change(this)">论文管理</li>
             <li>其他功能</li>
         </ul>
     </div>
-    <div id="setadmin" class="userlist" style="display: none;">
+    <div class="rightCnt">
+        <div id="paperadmin" class="userlist" style="display: none;">
         <table class="table tableList">
 		    	<thead>
 
 		    	</thead>
 		    	<tbody>
-                    {%  for user in users  %}
-		    		<tr>
-		    			<td class="col-xm-4 col-md-4">{{ user.name }}</td>
-                        <td class="col-xm-4 col-md-4 col-md-offset-2">{{ user.identity }}</td>
-                        <td><button  class="col-xm-2 col-md-2 resetPwd" onclick="changeIdentity(this)">更改权限</button></td>
-		    		</tr>
+                    {%  for publication in publications  %}
+                      <tr>
+                          <td class="col-sm-2 col-md-2">
+                              {{ publication.date }}
+                          </td>
+                          <td class="col-sm-8 col-md-8 col-md-offset-2">
+                              <p><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></p>
+                              <p>{{ publication.authors }}</p>
+                              <p>{{ publication.journalname }} </p>
+                          </td>
+                            <td class="col-sm-2 col-md-2 col-md-offset-2">
+                                <button class="delpubbtn" onclick="delPub(this)"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1539054739914" class="icon"  style="" height="20" width="20" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2718" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M861.012317 164.091494C765.809507 68.885661 639.229448 16.455901 504.590713 16.455901S243.372927 68.885661 148.170117 164.091494C52.965291 259.293296 0.534525 385.874363 0.534525 520.51209c0 134.639743 52.430767 261.217786 147.635592 356.422612 95.20281 95.20281 221.782869 147.633577 356.420596 147.633577s261.217786-52.430767 356.420596-147.633577c95.204825-95.204825 147.635592-221.783877 147.635592-356.422612C1008.646902 385.874363 956.217143 259.293296 861.012317 164.091494zM791.219829 810.54584c-4.394084 4.393077-10.152441 6.590623-15.910797 6.590623-5.759364 0-11.518728-2.197546-15.911805-6.590623L504.590713 555.740334 249.785207 810.54584c-4.394084 4.393077-10.152441 6.590623-15.911805 6.590623-5.758356 0-11.516713-2.197546-15.910797-6.590623-8.788169-8.788169-8.788169-23.036448 0-31.824617L472.767104 523.916725 219.336953 270.485566c-8.788169-8.788169-8.788169-23.036448 0-31.824617 8.788169-8.785146 23.035441-8.785146 31.823609 0l253.431158 253.431158 253.431158-253.431158c8.788169-8.785146 23.035441-8.785146 31.823609 0 8.788169 8.788169 8.788169 23.036448 0 31.824617L536.41533 523.916725l254.804499 254.805506C800.007998 787.509392 800.007998 801.757672 791.219829 810.54584z" p-id="2719" fill="#ff9800"></path></svg>
+                                </button>
+                            </td>
+
+                      </tr>
                     {%  endfor %}
 		    	</tbody>
 		    </table>
     </div>
-    <div id="useradmin" class="userlist" ">
+        <div id="useradmin" class="userlist" >
         <div  class="adminForm">
             <div id="adduserform" class="form-horizontal"  >
                 <div class="form-group">
@@ -76,13 +87,18 @@
                         <td class="col-xm-4 col-md-4 col-md-offset-2">
                         	<p>{{ user.nake_name }}</p>
                         </td>
-                        <td class="col-xm-2 col-md-2"><button class="deluserbtn" onclick="delUser(this)" style="float:right">删除</button> </td>
+                        <td class="col-xm-4 col-md-4 col-md-offset-2">{{ user.identity }}</td>
+                        <td><button  class="col-xm-2 col-md-2 resetPwd" onclick="changeIdentity(this)">更改权限</button></td>
                         <td><button  class="col-xm-2 col-md-2 resetPwd" onclick="resetPWD(this)">重置密码</button></td>
+                        <td class="col-xm-2 col-md-2"><button class="deluserbtn" onclick="delUser(this)" ><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1539054739914" class="icon"  style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2718" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M861.012317 164.091494C765.809507 68.885661 639.229448 16.455901 504.590713 16.455901S243.372927 68.885661 148.170117 164.091494C52.965291 259.293296 0.534525 385.874363 0.534525 520.51209c0 134.639743 52.430767 261.217786 147.635592 356.422612 95.20281 95.20281 221.782869 147.633577 356.420596 147.633577s261.217786-52.430767 356.420596-147.633577c95.204825-95.204825 147.635592-221.783877 147.635592-356.422612C1008.646902 385.874363 956.217143 259.293296 861.012317 164.091494zM791.219829 810.54584c-4.394084 4.393077-10.152441 6.590623-15.910797 6.590623-5.759364 0-11.518728-2.197546-15.911805-6.590623L504.590713 555.740334 249.785207 810.54584c-4.394084 4.393077-10.152441 6.590623-15.911805 6.590623-5.758356 0-11.516713-2.197546-15.910797-6.590623-8.788169-8.788169-8.788169-23.036448 0-31.824617L472.767104 523.916725 219.336953 270.485566c-8.788169-8.788169-8.788169-23.036448 0-31.824617 8.788169-8.785146 23.035441-8.785146 31.823609 0l253.431158 253.431158 253.431158-253.431158c8.788169-8.785146 23.035441-8.785146 31.823609 0 8.788169 8.788169 8.788169 23.036448 0 31.824617L536.41533 523.916725l254.804499 254.805506C800.007998 787.509392 800.007998 801.757672 791.219829 810.54584z" p-id="2719" fill="#ff9800"></path></svg></button> </td>
+
 		    		</tr>
                     {%  endfor %}
 		    	</tbody>
 		    </table>
     </div>
+    </div>
+
 
     <script>
         $(document).ready(function() {
@@ -121,11 +137,11 @@
             thisbtn.style.backgroundColor='navajowhite';
             if(divname=='useradminLi'){
                 $('#useradmin').css('display','block');
-                $('#setadmin').css('display','none');
-                $('#setadminLi').css('background-color','antiquewhite');
+                $('#paperadmin').css('display','none');
+                $('#paperadminLi').css('background-color','antiquewhite');
             }else{
                 $('#useradmin').css('display','none');
-                $('#setadmin').css('display','block');
+                $('#paperadmin').css('display','block');
                 $('#useradminLi').css('background-color','antiquewhite');
             }
         }
@@ -151,9 +167,35 @@
                 }
             });
         }
+        function delPub(thisbtn){
+            var delpub = thisbtn.parentElement.parentElement.children[1].firstElementChild.firstElementChild.innerHTML;
+            alert(delpub);
+            var pubFileNameURL = thisbtn.parentElement.previousElementSibling.children[0].children[0];
+            pubFileNameURL = $(pubFileNameURL).attr("href").split('/');
+            var pubFileName = pubFileNameURL[pubFileNameURL.length-1];
+
+            $.ajax({
+                url: '/operator/',
+                type: 'post',
+                data:  {
+                    "delpub": delpub,
+                    "pubFileName":pubFileName,
+                    "actiontype":'4', //删除论文
+                },
+                dataType: 'json',
+                success: function (message) {
+                    if(message["warning"]=="1"){
+                        thisbtn.parentElement.parentElement.remove();
+                    }
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
+        }
         function changeIdentity(thisbtn) {
             var username = thisbtn.parentElement.parentElement.firstElementChild.innerHTML;
-            var nowIdentity = thisbtn.parentElement.parentElement.children[1].textContent.replace(/[\r\n]/g,"").replace(/[ ]/g,"");
+            var nowIdentity = thisbtn.parentElement.parentElement.children[2].textContent.replace(/[\r\n]/g,"").replace(/[ ]/g,"");
             var identity = '1';
             if(nowIdentity == "管理员"){
                 identity='0';
@@ -164,16 +206,16 @@
                 data:  {
                     "username":username,
                     "identity":identity,
-                    "actiontype":'3',
+                    "actiontype":'3', //更换用户身份
                 },
                 dataType: 'json',
                 success: function (message) {
                     alert(message["warning"]);
                     if(message["flag"]=="1"){
                         if(identity=='0'){
-                            thisbtn.parentElement.parentElement.children[1].innerHTML="普通用户";
+                            thisbtn.parentElement.parentElement.children[2].innerHTML="普通用户";
                         }else{
-                            thisbtn.parentElement.parentElement.children[1].innerHTML="管理员";
+                            thisbtn.parentElement.parentElement.children[2].innerHTML="管理员";
                         }
                     }
                 },

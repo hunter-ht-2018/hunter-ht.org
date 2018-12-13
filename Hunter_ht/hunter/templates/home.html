@@ -145,14 +145,12 @@
                     {%  for publication in publications  %}
                       <tr>
                           <td class="col-sm-2 col-md-2">
-                              {{ publication.publishType }}
-                              <br>
                               {{ publication.date }}
                           </td>
                           <td class="col-sm-10 col-md-10 col-md-offset-2">
                               <p><a href={{ publication.link }} target="_blank">{{ publication.title }}</a></p>
                               <p>{{ publication.authors }}</p>
-                              <p>{{ publication.journalname }} {{publication.index}}</p>
+                              <p>{{ publication.journalname }} </p>
                           </td>
 
                       </tr>
@@ -186,11 +184,6 @@
 		    </div>
      	</section>
      </div>
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<!-- <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script> -->
-
-	<!--control content's height -->
 	<script type="text/javascript">
 		$(document).ready(function(){
 			changeSectionHeight();

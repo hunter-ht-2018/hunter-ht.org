@@ -4,9 +4,9 @@ import datetime
 # Create your models here.
 class User(models.Model):
     userID = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     pwd = models.CharField(max_length=100)
-    nake_name = models.CharField(max_length=50)
+    nake_name = models.CharField(max_length=100)
     identity = models.CharField(max_length=1, default='0')
     introduction = models.TextField(default="No Information")
 
@@ -19,11 +19,13 @@ class Publications(models.Model):
     publishType = models.CharField(max_length=100,default=' ')
     journalname=models.CharField(max_length=1000,default=' ')
     date =  models.DateField(default=timezone.now)
-    index = models.CharField(max_length=100,default=' ')
+    indexType = models.CharField(max_length=100,default=' ')
+    uploadByUser = models.CharField(max_length=50,default='no records')
+    isOpen = models.CharField(max_length=5,default='1')
 
 class PubToUser(models.Model):
     pubID = models.BigIntegerField()
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=50)
 
 class Articles(models.Model):
     articleID = models.BigIntegerField(primary_key=True)

@@ -194,11 +194,22 @@ span{
 	height: 400px;
 	margin:100px auto;
 }
+.hide{
+	display: none;
+}
 .control-select{
 	height:30px;
 	text-align: right;
 	line-height: 30px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: white;
+    border: solid 1px #ff9800;
+}
+.select_ctrl{
+	width:200px;
+	border-radius: 5px;
+	padding-left: 30px;
+	margin-left:20%;
 }
 .upload-btn > button{
 	width:150px;
@@ -243,7 +254,7 @@ span{
 	}
 	.control-select{
 		margin-left:20px;
-		float:left;
+		float:right;
 	}
 	.control-input{
 		width:60%;
@@ -325,3 +336,274 @@ svg{
     margin-top:50px;
     background-color: #eaeaea;
 }
+.isOpenR{
+	display: none;
+}
+.upload-btn>label{
+	position:relative;
+	margin-right:100px;
+	cursor: pointer;
+}
+.upload-btn>label::before{
+	display: block;
+	width:20px;
+	height:20px;
+	border:solid 1px #ff9800;
+	border-radius: 2px;
+	horiz-align: right;
+	left:-30px;
+	content:"";
+	position: absolute;
+}
+.upload-btn>input:checked+label::before{
+	background-color: white;
+}
+.upload-btn>input:checked+label::after{
+	display: inline-block;
+	content:"";
+	width:10px;
+	height: 10px;
+	border-radius: 5px;
+	position: absolute;
+	left:-25px;
+	bottom: 5px;
+	background-color: black;
+}
+
+.delePubBtn{
+	margin-bottom: 10px;
+}
+.modifyCnt{
+	width:600px;
+	height:200px;
+	display: block;
+	margin:0 auto;
+}
+.modifyCtrl{
+	display: block;
+    width: 70%;
+    float: right;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+	border: 1px solid #FF9800;
+    border-radius: 5px;
+}
+.modifyCnt>.control-select{
+	width:80px;
+	float: left;
+}
+.modifyCnt>li>label{
+	float: left;
+}
+.modifyCnt>ul{
+	width: 100%;
+}
+.modifyCnt>li{
+	width: 100%;
+	margin-bottom:20px;
+}
+
+.subModifyBtn{
+	float: right;
+	width:200px;
+	height:35px;
+	color:#333;
+	border:solid 1px #c7c7c7;
+	text-align: center;
+	border-radius:5px;
+}
+.subModifyBtn:hover{
+	color: #333;
+	border-color:#ff9800;
+}
+.uploadModForm{
+	width: 60%;
+    height: 40%;
+    margin: 10% 20%;
+    padding-top: 20px;
+    position: fixed;
+	background-color: #f3eded;
+    border: solid 2px #ff9800;
+    z-index: 999;
+
+
+}
+.modWrapper{
+	-webkit-animation-duration: 500ms;
+	-moz-animation-duration: 500ms;
+	-o-animation-duration: 500ms;
+	animation-duration: 500ms;
+	-webkit-transform-origin: 50% 100%;
+	-moz-transform-origin: 50% 100%;
+	-ms-transform-origin: 50% 100%;
+	-o-transform-origin:50% 100%;
+	transform-origin: 50% 100%;
+}
+.modWrapper.slipUp{
+	-webkit-transform: rotateX(0deg);
+	-moz-transform: rotateX(0deg);
+	-ms-transform: rotateX(0deg);
+	-o-transform: rotateX(0deg);
+	transform: rotateX(0deg);
+	-webkit-animation-name: contentSlipToUp;
+	-moz-animation-name: contentSlipToUp;
+	-o-animation-name: contentSlipToUp;
+	animation-name: contentSlipToUp;
+}
+
+        .wrap-slipBottom{
+            -webkit-transform: rotateX(90deg);
+            -moz-transform: rotateX(90deg);
+            -ms-transform: rotateX(90deg);
+            -o-transform: rotateX(90deg);
+            transform: rotateX(90deg);
+            -webkit-animation-name: contentSlipToBottom;
+            -moz-animation-name: contentSlipToBottom;
+            -o-animation-name: contentSlipToBottom;
+            animation-name: contentSlipToBottom;
+        }
+
+.dialog-face{
+	position: fixed;
+	background: #9e9e9e;
+    height: 100%;
+	width: 100%;
+	z-index: 990;
+	top: 0;
+	left: 0;
+	opacity: 0.7;
+
+	-webkit-animation-duration: 500ms;
+	-moz-animation-duration:500ms;
+	-o-animation-duration:500ms;
+	animation-duration: 500ms;
+}
+.face-slipBottom[opacity="0"]{
+            display: none;
+        }
+.dialog-face.slipUp{
+	opacity: 0.7;
+	-webkit-animation-name: dialogFaceSlipToUp;
+	-moz-animation-name: dialogFaceSlipToUp;
+	-o-animation-name: dialogFaceSlipToUp;
+	animation-name: dialogFaceSlipToUp;
+}
+
+.face-slipBottom{
+	opacity: 0;
+	visibility: hidden;
+	-webkit-animation-name: dialogFaceSlipToBottom;
+	-moz-animation-name: dialogFaceSlipToBottom;
+	-o-animation-name: dialogFaceSlipToBottom;
+	animation-name: dialogFaceSlipToBottom;
+}
+.cloDialog{
+	display: block;
+    margin: 0 auto;
+    width: 50%;
+    background-color: black;
+    height: 40px;
+    border-radius: 10px;
+	font-size: 20px;
+    margin-top: 15px;
+}
+
+ /* ---------------------动画关键帧 -------------------*/
+
+        @keyframes dialogFaceSlipToUp  {
+            0%{
+               opacity: 0;
+            }
+            100%{
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes dialogFaceSlipToBottom {
+            0%{
+                opacity: 0.7;
+                visibility:visible;
+            }
+            100%{
+                visibility: hidden;
+                opacity: 0;
+            }
+        }
+
+        @keyframes dialogSlipToUp  {
+            0%{
+                top: 100%;
+                opacity: 0.3;
+            }
+            100%{
+                top: 50%;
+                opacity: 1;
+            }
+        }
+
+        @keyframes dialogSlipToBottom  {
+            0%{
+                top: 50%;
+                opacity: 1;
+                -webkit-transform: translate(-50%, -50%);
+                -moz-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                -o-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+            100%{
+                top: 100%;
+                opacity: 0.3;
+                -webkit-transform: translate(-50%, 0);
+                -moz-transform: translate(-50%, 0);
+                -ms-transform: translate(-50%, 0);
+                -o-transform: translate(-50%, 0);
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes contentSlipToUp  {
+            0%{
+                -webkit-transform: rotateX(90deg);
+                -moz-transform: rotateX(90deg);
+                -ms-transform: rotateX(90deg);
+                -o-transform: rotateX(90deg);
+                transform: rotateX(90deg);
+            }
+            100%{
+                -webkit-transform: rotateX(0deg);
+                -moz-transform: rotateX(0deg);
+                -ms-transform: rotateX(0deg);
+                -o-transform: rotateX(0deg);
+                transform: rotateX(0deg);
+            }
+        }
+
+        @keyframes contentSlipToBottom  {
+            0%{
+                -webkit-transform: rotateX(0deg);
+                -moz-transform: rotateX(0deg);
+                -ms-transform: rotateX(0deg);
+                -o-transform: rotateX(0deg);
+                transform: rotateX(0deg);
+            }
+            60%{
+                -webkit-transform: rotateX(60deg);
+                -moz-transform: rotateX(60deg);
+                -ms-transform: rotateX(60deg);
+                -o-transform: rotateX(60deg);
+                transform: rotateX(60deg);
+            }
+            100%{
+                -webkit-transform: rotateX(90deg);
+                -moz-transform: rotateX(90deg);
+                -ms-transform: rotateX(90deg);
+                -o-transform: rotateX(90deg);
+                transform: rotateX(90deg);
+            }
+        }
