@@ -40,7 +40,7 @@ body{
 	font-family: 'Montserrat', sans-serif;
 	background:#FFF;
 	font-weight: 400;
-	font-size: 15px;
+	font-size: 16px;
 	color:#000;
 	overflow: hidden;
 	-webkit-font-smoothing:antialiased;
@@ -101,12 +101,7 @@ h3{
 .button{
 	float: right;
 }
-/*#navbar-menu > ul > li:hover{
-	background-color: rgba(0, 0, 0, .85);
-}*/
-/*#navbar-menu > a:hover{
-	color:red;
-}*/
+
 
 
 .site-header {
@@ -120,6 +115,7 @@ h3{
 }
 .section{
 	padding:5% 2%;
+	padding-bottom:2%;
 	/*background-color: white;*/
 }
 .viewAll{
@@ -307,8 +303,9 @@ footer p{
 }
 
 .viewItem a:hover{
-	color:#FFF;
+	color: #ff9800;
 	transition: ease-in-out color 0.1s;
+	text-decoration: none;
 }
 
 #Hunter-ht img{
@@ -529,4 +526,53 @@ option{
 }
 .hide{
 	display: none;
+}
+
+.emlDrs{
+	font-style: italic;
+    font-weight: normal;
+    font-size: 18px;
+    color: grey;
+}
+
+.labMember{
+	width:800px;
+	height:auto;
+	margin:0 auto;
+}
+.labMember > ul >li{
+	width:25%;
+	height:35px;
+	line-height: 35px;
+	float: left;
+	padding-left:2%;
+	margin-left:3%;
+	list-style-type: none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	/*border-left:solid 10px black;*/
+	/*border-right:solid 15px #ffd4a6;*/
+	border-bottom:solid 1px #ffd4a6;
+}
+
+.labMember>h4{
+	height:30px;
+	line-height:30px;
+	margin-bottom:20px;
+}
+.labMember>ul>li>a{
+	width:30px;
+	display: block;
+	float: right;
+	text-decoration: none;
+}
+
+.labMember>ul>li:hover{
+	background-color: #ffd4a6;
+}
+.labMember>ul>li>a>svg.icon{
+	width:20px;
+	height:30px;
+	text-align: center;
 }

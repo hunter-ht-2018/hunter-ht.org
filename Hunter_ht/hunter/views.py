@@ -54,6 +54,7 @@ def home(request):
                     pubAuthors.append(name['username'])
             for publication in publications:
                 print publication.pubID
+            labMembers = User.objects.all();
             return render_to_response('home.html',locals())
 
     return render(request, 'home.html')

@@ -68,8 +68,17 @@
 		      <h1>Home</h1>
 		      <span></span>
 		      <p>&nbsp;&nbsp;&nbsp;&nbsp;Hunter is a software research group that focuses on vulnerability detection. Our research interests cover multiple layers of software, including operating systems, firmware, binaries and web aplications. We are committed to developing tools of symbolic execution, fuzzing and binary analysis for automated detection of software vulnerabilities. </p>
-		      <p>Email Address: hunter_ht@outlook.com</p>
+		      <p class="emlDrs">Email Address: hunter_ht@outlook.com</p>
 		    </div>
+            <div class="labMember">
+                <h4>LEARN ABOUT US</h4>
+                <ul id="publicationList">
+                    {%  for labMember in labMembers  %}
+                        <li>{{ labMember.name }}<a target="_blank" href="profile/{{ labMember.name }}.html"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1546047395430" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6855" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="30"><defs><style type="text/css"></style></defs><path d="M765.7 486.8L314.9 134.7c-5.3-4.1-12.9-0.4-12.9 6.3v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1c16.4-12.8 16.4-37.6 0-50.4z" p-id="6856" fill="#333333"></path></svg></a> </li>
+                    {%  endfor %}
+		    	</ul>
+
+            </div>
      	</section>
      	<section id="Projects">
      		<div class="section position-relative overflow-hidden text-center bg-light">
