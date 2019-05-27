@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="decription" content="personalpage">
+    <meta name="author" content="liuyingying">
+    <title>index</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link href="../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+{#	<link rel="stylesheet" type="text/css" href="../static/css/markdown.css">#}
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../static/js/showdown.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top " role="navigation">
+      <div class="width-limit">
+        <!-- logo on left -->
+        <a class="navbar-brand nav-title logo" href="#">HUNTER</a>
+        <!-- logo on right -->
+          <a class="logout" onclick="logout()">EXIT</a>
+        <div title="查看与编辑我的信息" id="username"></div>
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+          </div>
+          <div class="collapse navbar-collapse" id="menu">
+            <ul class="nav navbar-nav">
+              <li class="tab">
+                <a href="#" onclick="showPub()">
+                  <span class="menu-text">Publications</span>
+                </a>
+              </li>
+              <li class="tab">
+                <a href="#" onclick="showArt()">
+                  <span class="menu-text">Articles</span>
+                </a>
+              </li>
+              <li class="tab">
+                <a href="#" onclick="showUpload()">
+                  <span class="menu-text">Upload</span>
+                </a>
+              </li>
+              <li>
+                <a href="/write/" target="_blank">Write</a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div id="dialog-face" class="dialog-face hide"></div>
+    <div id="modWrapper" style="position:fixed;width:100%;height:100%;z-index:1000;" class="modWrapper hide">
+        <div id="uploadModForm" class="uploadModForm"  >
+            <ul class="modifyCnt">
+                <li>
+                    <h3 style="text-align:center;"></h3>
+                </li>
+                <li>
+                    <label>作者:</label>
+                    <input type="text" autocomplete="off" class="modifyCtrl" name="authors" required>
+                </li>
+
+                <li>
+                    <label>日期:</label>
+                    <input type="text" autocomplete="off" class="modifyCtrl" name="date" required>
+                </li>
+                <li>
+                    <label>名称:</label>
+                    <input type="text" autocomplete="off" class="modifyCtrl" name="journalname" required>
+                </li>
+                <li>
+                    <label>检索类型:</label>
+                    <input type="text" autocomplete="off" class="modifyCtrl" name="index">
+                </li>
+                <li >
+                    <label>发表类型:</label>
+                    <select class="control-select select_ctrl"  name="type">
+                        <option value="会议">会议</option>
+                        <option value="期刊">期刊</option>
+                        <option value="专利">专利</option>
+                        <option value="软著">软著</option>
+                    </select>
+                </li>
+                <li>
+                    <button class="subModifyBtn" onclick="submitMod(this)" type="submit" class="btn btn-default">确定修改</button>
+                </li>
+                <li colspan="2"><button class="cloDialog" onclick="cloDialog()">关闭</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-two container content-border">
+
+        <section id="publications" class="list">
+
+            <table class="table tableList">
+              <thead>
+
+              </thead>
+              <tbody>
+                  {%  for publication in publications  %}
+                  <tr>
+                      <td class="col-sm-2 col-md-2">
+                          <p>{{ publication.publishType }}</p>
+
+                          <p>{{ publication.date }}</p>
+                      </td>
+                      <td class="col-sm-8 col-md-8 col-md-offset-2">
+                          <p><a href="../{{ publication.link }}" target="_blank" class="title_a">{{ publication.title }}</a></p>
+                          <p>{{ publication.authors }}</p>
+                          <p>{{ publication.journalname }}:{{publication.index}}</p>
+                      </td>
+                      <td class="col-sm-1">
+                          <button class="delePubBtn" onclick="delePub(this)">删除</button>
+                          <br>
+                          <button class="modifyBtn" onclick="modifyPub(this)">修改</button>
+                      </td>
+                      <td class="col-sm-1">
+                          <p class="uploadBy" style="display: none">{{ publication.uploadByUser }}</p>
+                          <button class="ifOpen" onclick="changeOpenState(this)">{{ publication.isOpen }}</button>
+                      </td>
+
+                  </tr>
+
+                  {%  endfor %}
+              </tbody>
+            </table>
+        </section>
+        <section id="articles" class="list move-pub">
+            <div id="articleWrap">
+                <div class="short-title">管理员发布</div>
+                <ul id="privateArtList" class="node-list">
+
+                </ul>
+                <br>
+                <div class="short-title">我的文章</div>
+                <ul id="articleList" class="node-list">
+
+                </ul>
+            </div>
+
+            <div id="articleView" class="hide">
+                <button class="lastStep" onclick="returnToList()"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1541063213171" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2135" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M939.880137 487.72513l-782.215258 0 358.804922-318.92975c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.505595-42.367947-2.492774L64.602344 490.13911c-6.407943 5.693676-10.073426 13.858636-10.073426 22.430872s3.665483 16.737196 10.073426 22.430872l411.993309 366.204449c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947L169.687704 548.100196 939.880137 548.100196c16.57449 0 30.011524-13.613042 30.011524-30.187533S956.454628 487.72513 939.880137 487.72513z" p-id="2136" fill="#FF9800"></path></svg></button>
+                <div id="artTitle"><h1></h1></div>
+                <div id="authorName"></div>
+                <div id="content"></div>
+            </div>
+        </section>
+        <section id="upload" class="list move-pub">
+            <div class="uploadForm" >
+                <form id="uploadForm" class="form-horizontal" role="form" action="/index/" method="post" enctype="multipart/form-data" >
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">作者</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control" placeholder="Example:Tom,Bob,Jane" name="authors" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text"  class="form-control"  name="title" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">文件</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="file" name="myfile" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+{#                        <label class="col-sm-2 control-label">名称</label>#}
+                        <select class="col-sm-2 control-select" name="type">
+                            <option value="0">请选择</option>
+                            <option value="会议">会议</option>
+                            <option value="期刊">期刊</option>
+                            <option value="专利">专利</option>
+                            <option value="软著">软著</option>
+                        </select>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control"  name="journalname" placeholder="名称" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">日期</label>
+                        <div class="col-sm-10 control-input">
+{#                            <input type="text" class="form-control" placeholder="示例：2018-08-08"  name="date" required>#}
+                            <div class="input-group date form_date " data-date="" data-date-format="yyyy-MM-dd" data-link-field="dtp_input2" data-link-format="yyyymmdd">
+                                <input class="form-control" size="16" type="text" name="date" value="" readonly="" required>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+				            <input type="hidden" id="dtp_input2" value="" /><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">检索类型</label>
+                        <div class="col-sm-10 control-input">
+                            <input type="text" class="form-control" name="index" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10 upload-btn">
+                            <input class="isOpenR" id="open" type="radio" class="col-sm-5"  value="1" name="isOpen" checked="checked"><label for="open">发布</label>
+                            <input class="isOpenR" id = "notOpen" type="radio" class="col-sm-5"  value="0" name="isOpen"><label for="notOpen">不发布</label>
+                            <button type="submit" class="btn btn-default">提交</button>
+                            <input id="usernameforrecord" style="display: none" value="" name="recordname"></input>
+					        <p id="uploadError" style="color:red;">{{ uploadError }}</p><p id="uploadMessage" style="color:red;">{{ uploadMessage }}</p>
+                        </div>
+                    </div>
+                </form>
+	        </div>
+        </section>
+    </div>
+    <script type="text/javascript" src="../static/js/jquery-1.9.1.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+	$('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+	$('.form_time').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 1,
+		minView: 0,
+		maxView: 1,
+		forceParse: 0
+    });
+</script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var username=getUsername();
+            var uploadMessage = document.getElementById("uploadMessage").innerHTML;
+            if(uploadMessage!=null&&uploadMessage!=""){
+                {#alert(uploadMessage);#}
+            }
+            var uploadError = document.getElementById("uploadError").innerHTML;
+            if(uploadError!=null&&uploadError!=""){
+                alert("数据库错误，请联系管理员");
+            }
+            var options = {
+                //需要刷新的区域id
+                target:'#uploadForm',
+            };
+            //绑定FORM提交事件
+            $('#uploadForm').submit(function() {
+                $(this).ajaxSubmit(options);
+                return false;
+            });
+            filterPublications(username);
+        });
+        getDataShow();
+        function cloDialog() {
+            var animation=function(){
+                $("#dialog-face").removeClass("slipUp");
+                document.getElementById("dialog-face").className="dialog-face face-slipBottom";
+                $("#modWrapper").removeClass("slipUp");
+                document.getElementById("modWrapper").className="modWrapper wrap-slipBottom";
+            };
+
+            setTimeout(animation,100);
+        }
+        function submitMod(thisbtn) {
+            var titleF=thisbtn.parentElement.parentElement.children[0].children[0];
+            var authorF=thisbtn.parentElement.parentElement.children[1].children[1];
+            var dateF=thisbtn.parentElement.parentElement.children[2].children[1];
+            var pubName=thisbtn.parentElement.parentElement.children[3].children[1];
+            var indexF=thisbtn.parentElement.parentElement.children[4].children[1];
+            var pubType = thisbtn.parentElement.parentElement.children[5].children[1];
+            if(!titleF.value&&!authorF.value&&!dateF.value&&!indexF.value){
+                console.log("提交失败");
+            }
+            else{
+                $.ajax({
+                    url:'/operatePub/',
+                    type:'post',
+                    data:{
+                        "title":titleF.innerHTML,
+                        "author":authorF.value,
+                        "date":dateF.value,
+                        "pubName":pubName.value,
+                        "index":indexF.value,
+                        "pubType":pubType.value,
+                        "operateType":"2", //修改上传论文
+                    },
+                    success:function(response){
+                        console.log(response["warning"]);
+                        var titles = document.getElementsByClassName("title_a");
+                        for(var i=0;i<titles.length;i++){
+                            if(titles[i].innerHTML==titleF.innerHTML){
+                                titles[i].parentElement.nextElementSibling.innerHTML=authorF.value;
+                                titles[i].parentElement.nextElementSibling.nextElementSibling.innerHTML=pubName.value+":"+indexF.value;
+                                titles[i].parentElement.parentElement.previousElementSibling.children[0].innerHTML = pubType.value;
+                                titles[i].parentElement.parentElement.previousElementSibling.children[1].innerHTML = dateF.value;
+                            }
+                        }
+                        cloDialog();
+                    },
+                    error:function (xhr) {
+                        console.error('something went wrong...');
+                    }
+                })
+            }
+        }
+        function modifyPub(thisbtn){
+            var animation = function(){
+                $("#dialog-face").removeClass("hide");
+                $("#dialog-face").addClass("slipUp");
+                $("#modWrapper").removeClass("hide");
+                $("#modWrapper").addClass("slipUp");
+            };
+            setTimeout(animation,100);
+            var modifyForm = document.getElementById("uploadModForm").children[0];
+            var titleF = modifyForm.children[0].children[0];
+            var authorF = modifyForm.children[1].children[1];
+            var dateF = modifyForm.children[2].children[1];
+            var nameF = modifyForm.children[3].children[1];
+            var indexF = modifyForm.children[4].children[1];
+            var pubTypeF = modifyForm.children[5].children[1];
+
+            var title = thisbtn.parentElement.parentElement.children[1].children[0].children[0].innerHTML;
+            var author = thisbtn.parentElement.parentElement.children[1].children[1].innerHTML;
+            var date = thisbtn.parentElement.parentElement.children[0].children[1].innerHTML;
+            var pubType = thisbtn.parentElement.parentElement.children[0].children[0].innerHTML;
+            var pubName = thisbtn.parentElement.parentElement.children[1].children[2].innerHTML.split(":")[0];
+            var index = thisbtn.parentElement.parentElement.children[1].children[2].innerHTML.split(":")[1];
+
+            titleF.innerHTML=title;
+            authorF.value=author;
+            dateF.value=date;
+            indexF.value = index;
+            nameF.value=pubName;
+            $(pubTypeF).val(pubType);
+
+        }
+        function delePub(thisbtn){
+            var pubFileNames=thisbtn.parentElement.previousElementSibling.children[0].children[0];
+            pubFileNames = $(pubFileNames).attr("href").split('/');
+            var pubFileName = pubFileNames[pubFileNames.length-1];
+            var pubTitle=thisbtn.parentElement.previousElementSibling.children[0].firstChild.innerHTML;
+            $.ajax({
+                url:'/operatePub/',
+                type:'post',
+                data:{
+                    "pubFileName":pubFileName,
+                    "pubTitle":pubTitle,
+                    "operateType":"1", //删除论文
+                },
+                success:function(response){
+                    console.log(response["warning"]);
+                    thisbtn.parentElement.parentElement.innerHTML="";
+                },
+                error:function (xhr) {
+                    console.error('something went wrong...');
+                }
+            })
+        }
+        function filterPublications(username){
+            var Users = document.getElementsByClassName("uploadBy");
+            for(var i=0; i<Users.length;i++){
+                if (username==Users[i].innerHTML){
+                    Users[i].nextElementSibling.innerHTML=Users[i].nextElementSibling.innerHTML=="0"?"发布":"取消发布";
+                }else{
+                    Users[i].style.display="block";
+                    Users[i].parentElement.parentElement.children[2].innerHTML="";
+                    Users[i].nextElementSibling.innerHTML="";
+                }
+            }
+        }
+        function changeOpenState(thisbtn) {
+            var ifOpen = thisbtn.innerHTML=="取消发布"?"0":"1";
+            var title = thisbtn.parentElement.parentElement.children[1].firstElementChild.firstElementChild.innerHTML;
+            console.log(title);
+            console.log(ifOpen);
+            $.ajax({
+                url:'/operatePub/',
+                type:'post',
+                data:{
+                    "ifOpen":ifOpen,
+                    "title":title,
+                    "operateType":"0", //更改发布状态
+                },
+                success:function(response){
+                    console.log(response["warning"]);
+                    if(response["warning"]="更改成功"){
+                        thisbtn.innerHTML=ifOpen=="1"?"取消发布":"发布";
+                    }
+                },
+                error:function (xhr) {
+                    console.error('something went wrong...');
+                }
+            })
+        }
+        function getDataShow() {
+            var storage=window.sessionStorage;
+            var username=storage.username;
+            $.ajax({
+                url: '/index/',
+                type: 'get',
+                data:{
+                    "user":username,
+                },
+                success: function (response,status,xhr) {
+                    $("#articleList").empty();
+                    $("#privateArtList").empty();
+                    $.each($.parseJSON(response),function(i,item){
+                        var article = item.fields;
+                        var articleID=item.pk;
+                        var arttit =article.title.length>50? article.title.substring(0,50)+'...':article.title;
+                        var artCnt = article.content.length>100? article.content.substring(0,100)+'...':article.content;
+                        var isPublished = article.publish=='1'? "已发布":"未发布";
+                        var isPrivate = article.isPrivate;
+                        if(isPrivate!='1'){
+                            var articleHTML = '<li>\n' +
+                            '              <div class="article-content">\n' +
+                            '                  <button class="title" onclick=getArticle("'+articleID+'")>'+arttit+'</button><br>\n' +
+                            '                  <p class="abstract">'+artCnt+'</p>\n' +
+                            '                  <span>'+isPublished+'</span>'+
+                                '<span>'+article.editDateTime+'</span>'+
+                            '                  <a class="editbtn" title="编辑" target="_blank" href="/write/?title='+article.title+'"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1538270903865" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3673" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M607.232 896a32 32 0 1 1 0 64H192a96 96 0 0 1-96-96V160a96 96 0 0 1 96-96h544a96 96 0 0 1 96 96 32 32 0 0 1-64 0 32 32 0 0 0-32-32H192a32 32 0 0 0-32 32v704a32 32 0 0 0 32 32h415.232zM832 585.76v146.656c0 42.656-64 42.656-64 0v-146.656c0-42.688 64-42.688 64 0z" p-id="3674" fill="#ea6f5a"></path><path d="M288 320a32 32 0 1 1 0-64h224a32 32 0 0 1 0 64H288zM288 480a32 32 0 0 1 0-64h128a32 32 0 0 1 0 64H288zM639.424 926.592a32 32 0 1 1-64 0L576 800a96 96 0 0 1 96-96l127.744 1.152a32 32 0 1 1 0 64L672 768a32 32 0 0 0-32 32l-0.576 126.592z" p-id="3675" fill="#ea6f5a"></path><path d="M637.92 947.648a32 32 0 1 1-44.32-46.208l180.384-172.992a32 32 0 1 1 44.288 46.176l-180.352 173.024zM880.896 334.528a31.424 31.424 0 0 0 3.328-44.416l-0.416-0.512a32 32 0 0 0-44.896-3.36L408.32 652.288l-15.2 51.84 58.336-4.544 429.44-365.056z m51.616-86.4a95.36 95.36 0 0 1-9.408 134.496l-438.08 372.448a32 32 0 0 1-18.24 7.52l-114.944 8.896a32 32 0 0 1-33.184-40.928l30.944-105.472a32 32 0 0 1 9.984-15.36L797.408 237.504a96 96 0 0 1 134.688 10.112l0.416 0.512z" p-id="3676" fill="#ea6f5a"></path></svg></a>\n' +
+                            '                  <button class="delebtn" title="删除" onclick="deleteArt(this)"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1539054739914" class="icon"  style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2718" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M861.012317 164.091494C765.809507 68.885661 639.229448 16.455901 504.590713 16.455901S243.372927 68.885661 148.170117 164.091494C52.965291 259.293296 0.534525 385.874363 0.534525 520.51209c0 134.639743 52.430767 261.217786 147.635592 356.422612 95.20281 95.20281 221.782869 147.633577 356.420596 147.633577s261.217786-52.430767 356.420596-147.633577c95.204825-95.204825 147.635592-221.783877 147.635592-356.422612C1008.646902 385.874363 956.217143 259.293296 861.012317 164.091494zM791.219829 810.54584c-4.394084 4.393077-10.152441 6.590623-15.910797 6.590623-5.759364 0-11.518728-2.197546-15.911805-6.590623L504.590713 555.740334 249.785207 810.54584c-4.394084 4.393077-10.152441 6.590623-15.911805 6.590623-5.758356 0-11.516713-2.197546-15.910797-6.590623-8.788169-8.788169-8.788169-23.036448 0-31.824617L472.767104 523.916725 219.336953 270.485566c-8.788169-8.788169-8.788169-23.036448 0-31.824617 8.788169-8.785146 23.035441-8.785146 31.823609 0l253.431158 253.431158 253.431158-253.431158c8.788169-8.785146 23.035441-8.785146 31.823609 0 8.788169 8.788169 8.788169 23.036448 0 31.824617L536.41533 523.916725l254.804499 254.805506C800.007998 787.509392 800.007998 801.757672 791.219829 810.54584z" p-id="2719" fill="#ea6f5a"></path></svg></button>\n' +
+                            '              </div>\n' +
+                            '            </li>';
+                            $("#articleList").append(articleHTML);
+                        }else if(article.publish=='1'){
+                            var privateArticleHTML = '<li>\n' +
+                            '              <div class="article-content">\n' +
+                            '                  <button class="title" onclick=getArticle("'+articleID+'")>'+arttit+'</button><br>\n' +
+                            '              </div>\n' +
+                            '            </li>';
+                            $("#privateArtList").append(privateArticleHTML);
+                        }
+
+                    });
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong...');
+                }
+            });
+        }
+        function returnToList() {
+            $("#articleWrap").removeClass("hide");
+            $("#articleView").addClass("hide");
+        }
+
+        function getArticle (articleID){
+            $.ajax({
+                url:'/index/',
+                type:'get',
+                data:{
+                    "articleID":articleID,
+                },
+                success:function(response){
+                    {#var result = $.parseJSON(response);#}
+                    var result=response;
+                    $("#articleWrap").addClass("hide");
+                    $("#articleView").removeClass("hide");
+
+                    var converter = new showdown.Converter();
+                    var content = converter.makeHtml(result["content"]);
+                    $("#content").empty();
+                    $("#content").append(content);
+                    $("#artTitle").empty();
+                    $("#artTitle").append(result["title"]);
+                    $("#authorName").empty();
+                    $("#authorName").append(result["authorname"]);
+
+                },
+                error:function (xhr) {
+                    console.error('something went wrong...');
+                }
+            })
+        }
+        function deleteArt(thisbtn){
+            var title = thisbtn.parentElement.firstElementChild.innerHTML;
+            $.ajax({
+                url:'/index/',
+                type:'post',
+                data:{
+                    "title":title,
+                },
+                success:function(response){
+                    if (response["warning"]=="文章删除成功"){
+                        thisbtn.parentElement.parentElement.remove();
+                    }else{
+                        alert(response["warning"]);
+                    }
+                },
+                error:function (xhr) {
+                    console.error('something went wrong...');
+                }
+            })
+        }
+        function uploadFile(url, data){
+            $.ajax({
+                url: url,
+                type: 'post',
+                data:{
+                    "authors":data["authors"],
+                    "title":data["title"],
+                    "myfile":data["myfile"],
+                    "journalname":data["journalname"],
+                    "date":data["date"],
+                    "index":data["index"],
+                },
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function (msg) {
+                    $("#uploadMessage").text(msg["warning"]);
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
+        }
+
+        function getUsername(){
+            var storage=window.sessionStorage;
+            var username=storage.username;
+            if(username != null&&username.toString().length>0){
+                var usernameHTMl='<a target="_blank" href="/edit/'+username+'.html">'+username+'</a>';
+                document.getElementById('username').innerHTML=usernameHTMl;
+                document.getElementById('usernameforrecord').value=username;
+                return username;
+            }else{
+                alert("请先登录");
+                window.location.href="/signin/";
+            }
+        }
+
+        function logout() {
+            var storage = window.sessionStorage;
+            storage.clear();
+            window.location.href="/signin/";
+        }
+
+        function GetQueryString(name)
+        {
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null){
+                 return unescape(r[2]);
+             }
+             return null;
+        }
+      function showPub(){
+        $("#publications").hasClass("move-pub")?$("#publications").removeClass("move-pub"):1==1;
+        $("#articles").hasClass("move-pub")?1==1:$("#articles").addClass("move-pub");
+        $("#upload").hasClass("move-pub")?1==1:$("#upload").addClass("move-pub");
+      }
+      function showArt(){
+        $("#publications").hasClass("move-pub")?1==1:$("#publications").addClass("move-pub");
+        $("#articles").hasClass("move-pub")?$("#articles").removeClass("move-pub"):1==1;
+        $("#upload").hasClass("move-pub")?1==1:$("#upload").addClass("move-pub");
+        getDataShow();
+      }
+      function showUpload(){
+        $("#publications").hasClass("move-pub")?1==1:$("#publications").addClass("move-pub");
+        $("#articles").hasClass("move-pub")?1==1:$("#articles").addClass("move-pub");
+        $("#upload").hasClass("move-pub")?$("#upload").removeClass("move-pub"):1==1;
+      }
+    </script>
+    
+    <script src="../static/bootstrap-4.0.0/assets/js/vendor/popper.min.js"></script>
+    <script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="../static/bootstrap-4.0.0/assets/js/vendor/holder.min.js"></script>
+</body>
+</html>

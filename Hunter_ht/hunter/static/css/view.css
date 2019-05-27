@@ -1,0 +1,34 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.all{
+    width:800px;
+    margin:0 auto;
+}
+
+.head{
+    width:100%;
+    height:auto;
+    line-height: 50px;
+    text-align: center;
+}
+.subBar{
+    width:100%;
+    height:30px;
+    margin-top:10px;
+    line-height: 30px;
+    text-align: right;
+}
+#content{
+    width:100%;
+    margin-top:50px;
+    border-top:solid 1px dimgray;
+}
+@media (max-width: 992px) {
+    all{
+        width:100%;
+        margin:0 auto;
+    }
+}

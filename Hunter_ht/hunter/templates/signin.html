@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="decription" content="SignIn">
+	<meta name="author" content="liuyingying">
+	<title>SignIn</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/css/signin.css">
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../static/js/jquery.form.js"></script>
+    <script src="../static/js/md5.js"></script>
+    <script src="../static/js/jsencrypt.min.js"></script>
+
+</head>
+<body>
+
+    <div id="return"><a href="/home/"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1540884474640" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12583" xmlns:xlink="http://www.w3.org/1999/xlink" ><defs><style type="text/css"></style></defs><path d="M64 347.552L320 128v448z" p-id="12584" fill="#f98000"></path><path d="M265.472 896v-112h377.824a200 200 0 1 0 0-400H240V272h403.296c172.32 0 312 139.68 312 312S815.616 896 643.296 896H265.472z" p-id="12585" fill="#f98000"></path></svg></a></div>
+        <div id="logo">HUNTER</div>
+    <div class="container text-center">
+		<div id="signinform" class="form-signin col-centered" action="/signin/" method="POST" role="form">
+			<input name="username" type="text" class="form-control" placeholder="Name" required autofocus>
+			<input name="password" style="-webkit-text-security:disc;text-security:disc;" type="text" autocomplete="off" class="form-control" placeholder="Password" required>
+			<button id="submit" class="btn btn-lg btn-primary btn-block" >登录</button>
+            <p style="color:red;display: none;">{{ login_error }}</p>
+		</div>
+	</div>
+    <script type="text/javascript">
+        $(function() {
+            $('#submit').click(function() {
+                var data = [];
+                data["username"]= $('input')[0].value;
+                data["password"]= $('input')[1].value;
+                encryptSend('/signin/', data);  // Jsencrypt.do对应服务端处理地址
+            });
+        });
+
+        function encryptSend(url, data){
+            //var jsencrypt = new JSEncrypt();
+            // enData用来装载加密后的数据
+            var enData = new Object();
+            // 将参数用jsencrypt加密后赋给enData
+            enData["username"]=data["username"];
+            enData["password"]=hex_md5(data["password"]);
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    "username":enData["username"],
+                    "password":enData["password"],
+                },
+                dataType: 'json',
+                success: function (msg) {
+                    if(msg["message"]=="登录成功"){
+                        var storage = window.sessionStorage;
+                        storage['username'] = enData["username"];
+                        storage['identity'] = msg["identity"];
+                        if(msg["identity"]=="0"){
+                            window.location.href='/index/';
+                        }else{
+                            window.location.href='/admin/';
+                        }
+                    }else{
+                        alert(msg["message"]);
+                    }
+                },
+                error: function (xhr) {
+                    console.error('Something went wrong....');
+                }
+            });
+        }
+        function postData(){
+            {#alert(hex_md5($('input')[1].value));#}
+            var usr=$('input')[0].value;
+            var pwd=$('input')[1].value;
+            if(usr==""||pwd==""){
+                alert("用户名或密码不能为空");
+            }else{
+                pwd=hex_md5(pwd);
+                $.ajax({
+                    url:"/signin/",
+                    type:'POST',
+                    data:{
+                        "username":usr,
+                        "password":pwd,
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data["message"]=="登录成功"){
+                            window.location.href='/index/';
+                        }else{
+                            alert(data["message"]);
+                        }
+                    }
+                })
+            }
+        }
+    </script>}
+	<script src="../static/bootstrap-4.0.0/assets/js/vendor/popper.min.js"></script>
+	<script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+	<script src="../static/bootstrap-4.0.0/assets/js/vendor/holder.min.js"></script>
+</body>
+</html>
