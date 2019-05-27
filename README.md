@@ -25,10 +25,11 @@
 
 ### 注意事项
 > 若在使用过程中出现编码类问题报错，查看数据库中库/表/字段的编码方式；若编码方式非utf8/utf8mb4，修改数据库/表/字段编码方式为utf8/utf8mb4即可.（建议后者）
-查看、更改数据库、表的编码格式：
-查看数据库编码格式： show variables like 'character';
-查看数据表的编码格式：show create table tablename;
-修改数据库表的编码格式：ALTER TABLE tablename CHARACTER SET utf8mb4;
-查看字段编码、字段类型：show full columns from tablename;
-修改字段编码格式: ALTER TABLE tablename MODIFY COLUMN 字段名 字段类型 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ui;
-重启数据库：service mysql restart
+
+- 查看、更改数据库、表的编码格式：
+- 查看数据库编码格式： show variables like 'character';
+- 查看数据表的编码格式：show create table tablename;
+- 修改数据库表的编码格式：ALTER TABLE tablename CHARACTER SET utf8mb4;
+- 查看字段编码、字段类型：show full columns from tablename;
+- 修改字段编码格式: ALTER TABLE tablename MODIFY COLUMN 字段名 字段类型 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ui;
+- 重启数据库：service mysql restart
