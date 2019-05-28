@@ -7,8 +7,9 @@
 - Ubuntu16.04+
 
 ### 部署步骤
-- 将项目文件“Hunter-ht”放置于服务器目录下
-- 进入Hunter-ht目录
+- 首先下载或者克隆项目（hunter-ht.org或者自行重命名）
+- 将项目文件夹放置于服务器目录下，并进入文件目录（hunter-ht.org/yourfilename）
+- 进入Hunter-ht文件目录
   ```
   cd Hunter-ht
   ```
