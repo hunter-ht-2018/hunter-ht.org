@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="decription" content="ArticleView">
+    <meta name="author" content="liuyingying">
+    <title>View</title>
+
+    <link rel="stylesheet" href="../../static/css/view.css">
+    <script src="../../static/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../../static/js/showdown.js"></script>
+</head>
+<body>
+<div class="all">
+    <div class="head"><h1>{{ title }}</h1></div>
+    <div class="subBar">{{ authorname }}</div>
+    <div id="content">{{ article }}</div>
+</div>
+
+</body>
+<script>
+    $(document).ready(function() {
+        convMDtoHTML();
+    });
+
+    function convMDtoHTML(){
+        var text = document.getElementById("content").innerHTML;
+        var converter = new showdown.Converter();
+        var html = converter.makeHtml(text);
+        $("#content").empty();
+        $("#content").append(html);
+    }
+</script>
+</html>

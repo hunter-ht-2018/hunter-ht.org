@@ -1,0 +1,228 @@
+*{
+	margin:0;
+	padding: 0;
+}
+.userlist{
+    width:100%;
+    margin:100px auto;
+}
+button{
+    outline:none;
+    background-color: transparent;
+    border:none;
+}
+a{
+    color:#ff9800;
+}
+ul{
+    list-style: none;
+}
+nav{
+    width:100%;
+    height:50px;
+	color:#FF9800;
+    background-color: black;
+}
+#adminname, #hunterLogo{
+    width:200px;
+    height:50px;
+    line-height: 50px;
+    font-size: 24px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#hunterLogo{
+    float:left;
+    margin-left: 50px;
+}
+.logout{
+    width:50px;
+    height:50px;
+    line-height: 50px;
+    font-size: 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    float:right;
+    color:#ff9800;
+    text-align: right;
+    margin-right: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+a:hover{
+    color:#ff7000;
+}
+#adminname{
+    float:right;
+    text-align: right;
+    margin-right: 50px;
+}
+
+
+.adminForm{
+	width:100%;
+}
+#adduserform{
+    width:100%;
+}
+#adduserform > .form-group{
+    float:left;
+    margin:10px;
+}
+.adduserbtn, .deluserbtn, .resetPwd{
+    display:inline-block;
+    width:100px;
+    height: 40px;
+    line-height: 40px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:16px;
+    border:none;
+    border-radius:5px;
+    vertical-align: middle;
+}
+.adduserbtn{
+    color:#FF9800;
+    background-color: black;
+}
+.adduserbtn:hover{
+    color:#FF7000;
+}
+.deluserbtn{
+    width:20px;
+    height:20px;
+    margin-top:-15px;
+
+}
+.deluserbtn{
+    color:#FF9800;
+}
+.deluserbtn:hover{
+    color: #FF7000;
+}
+.resetPwd{
+    color:#FF9800;
+}
+.resetPwd:hover{
+    color: #FF7000;
+}
+@media (max-width: 767px){
+    .userlist{
+    width:100%;
+    margin:100px auto;
+    }
+}
+
+#leftBar{
+    width:170px;
+    height:100%;
+    padding-top:20px;
+    margin-top:-20px;
+    float: left;
+    color:black;
+}
+#leftBar > ul{
+    margin-top:-20px;
+}
+#leftBar > ul > li{
+    width:100%;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    -webkit-transition:all 0.2s ease-in-out;
+	transition:all 0.2s ease-in-out;
+}
+
+#leftBar > ul > li:hover{
+    width:100%;
+    height:50px;
+    background-color: navajowhite;
+}
+.rightCnt{
+    width:70%;
+    float: left;
+    margin-left:10%;
+}
+
+svg{
+	width:100%;
+	height:100%;
+}
+.editbtn, .delebtn{
+	width:20px;
+	height:20px;
+	float: right;
+	border:none;
+	background:white;
+	margin:0 10px;
+}
+
+.editbtn :hover, .delebtn :hover{
+	width:25px;
+	height:25px;
+}
+.article-content > p{
+	float: left;
+	width:70%;
+	height:20px;
+	overflow:hidden;
+}
+.article-content > a{
+	cursor: pointer;
+}
+.article-content > p{
+	margin:10px 0;
+}
+.article-content > span {
+	float: right;
+    margin-left: 10px;
+}
+.article-content>button{
+	outline:none;
+	background:none;
+	border:none;
+	color: #FF9800;
+}
+.article-content > button:hover{
+	color:#c59a6d;
+}
+.title{
+    width:60%;
+	font-size:20px;
+    text-align: left;
+}
+#articles{
+	position: relative;
+}
+#articleList{
+	position:absolute;
+    width:50%;
+}
+.lastStep{
+	width:30px;
+	height:30px;
+}
+#writenoticeLi>a{
+    color:black;
+}
+#artTitle{
+    width:100%;
+    height:auto;
+    line-height: 50px;
+    text-align: center;
+	font-size:24px;
+	font-weight: bold;
+}
+#authorName{
+    width:100%;
+    height:30px;
+    margin-top:10px;
+    line-height: 30px;
+    text-align: right;
+	font-style: italic;
+}
+#content{
+    width:100%;
+    margin-top:50px;
+    background-color: #eaeaea;
+}
