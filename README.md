@@ -1,5 +1,5 @@
 # hunter-ht.org
-> **“Hunter-ht”文件夹即为项目所有代码**
+
 
 ### 环境
 - Python2.7+
