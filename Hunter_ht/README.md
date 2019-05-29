@@ -9,10 +9,6 @@
 ### 部署步骤
 - 首先下载或者克隆项目（hunter-ht.org或者自行重命名）
 - 将项目文件夹放置于服务器目录下，并进入文件目录（hunter-ht.org/yourfilename）
-- 进入Hunter-ht文件目录
-  ```
-  cd Hunter-ht
-  ```
 - 执行如下两条命令，创建数据库
   ```
   python manage.py makemigrations
