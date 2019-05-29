@@ -443,7 +443,7 @@
                         if(isPrivate!='1'){
                             var articleHTML = '<li>\n' +
                             '              <div class="article-content">\n' +
-                            '                  <button class="title" onclick=getArticle("'+articleID+'")>'+arttit+'</button><br>\n' +
+                            '                  <a class="title" target="_blank" href="../articles/?articleID='+articleID.toString().trim()+'">'+arttit+'</a><br>'+
                             '                  <p class="abstract">'+artCnt+'</p>\n' +
                             '                  <span>'+isPublished+'</span>'+
                                 '<span>'+article.editDateTime+'</span>'+
@@ -455,7 +455,7 @@
                         }else if(article.publish=='1'){
                             var privateArticleHTML = '<li>\n' +
                             '              <div class="article-content">\n' +
-                            '                  <button class="title" onclick=getArticle("'+articleID+'")>'+arttit+'</button><br>\n' +
+                            '                  <a class="title" target="_blank" href="../articles/?articleID='+articleID.toString().trim()+'">'+arttit+'</a><br>'+
                             '              </div>\n' +
                             '            </li>';
                             $("#privateArtList").append(privateArticleHTML);

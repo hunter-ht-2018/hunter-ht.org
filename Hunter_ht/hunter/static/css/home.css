@@ -105,7 +105,7 @@ h3{
 
 
 .site-header {
-	background-color: rgba(0, 0, 0, .80);
+	background-color: rgba(0, 0, 0, .70);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
 	backdrop-filter: saturate(180%) blur(20px);
 }

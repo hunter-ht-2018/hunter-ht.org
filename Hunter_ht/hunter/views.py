@@ -60,6 +60,33 @@ def home(request):
 
     return render(request, 'home.html')
 
+def articles(request):
+    if request.is_ajax():
+        articleID = request.GET.get('articleID')
+        if articleID:
+            try:
+                Articles.objects.get(articleID=articleID)
+            except Articles.DoesNotExist:
+                errorMessage = "404"
+                response = JsonResponse({"errorMessage": errorMessage})
+                return response
+            article = Articles.objects.get(articleID=articleID)
+            isPublic = article.publish
+            if isPublic=='1':
+                authorID=Articles.objects.get(articleID=articleID).authorID
+                authorname = User.objects.get(userID=authorID).name
+            else:
+                authorname = ""
+                errorMessage="404"
+            errorMessage="1"
+            # return render_to_response('articles.html', locals())
+            # jsonStr = '{"title":"'+article.title+'","content":"'+article.content+'","authorname":"'+authorname+'"}'
+            # print jsonStr
+            # return HttpResponse(json.dumps(jsonStr), content_type='application/json')
+            response = JsonResponse({"title": article.title, "content": article.content, "authorname": authorname,"errorMessage":errorMessage})
+            return response
+    return render(request,'articles.html')
+
 def search(request):
     pubs={}
     if request.is_ajax():

@@ -177,7 +177,8 @@
                     {% for article in articles %}
 		    		<li>
 		    			<div class="article-content">
-		    				<button class="title" onclick="getArticle({{ article.articleID }})">{{ article.title }}</button>
+{#		    				<button class="title" onclick="getArticle({{ article.articleID }})">{{ article.title }}</button>#}
+                            <a class="title" target="_blank" href="articles?articleID={{ article.articleID }}">{{ article.title }}</a>
 		    				<p class="abstract">{{ article.content }}</p>
                             <p class="artdate">{{ article.editDateTime }}</p>
 		    			</div>
