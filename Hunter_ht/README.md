@@ -2,7 +2,7 @@
 
 
 ### 环境
-- Python2.7+
+- Python2.7
 - MySQL5.7+
 - Ubuntu16.04+
 
