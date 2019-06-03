@@ -344,6 +344,7 @@ footer p{
 }
 .tableList{
 	width: 50%;
+	height:90%;
 	margin:0 auto;
 }
 
@@ -416,6 +417,9 @@ footer p{
 	line-height: 24px;
 	color:#999;
 }
+#Publications{
+	overflow:auto;
+}
 
 #Publications a{
 	color:#FF9800;
@@ -425,9 +429,8 @@ footer p{
 	text-decoration: none;
 }
 #publicationList{
-	height:900px;
+	height:100%;
 	display: block;
-	overflow-y:auto;
 }
 .pubList{
 	margin:5% auto;
@@ -446,7 +449,7 @@ footer p{
 		white-space:nowrap;
 	}
 	.tableList{
-		width:100%;
+		width:90%;
 		margin-left:20px;
 	}
 }
