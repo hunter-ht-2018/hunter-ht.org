@@ -76,13 +76,19 @@ WSGI_APPLICATION = 'Hunter_ht.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+try:
+    mysql_user = os.environ['MYSQL_USER']
+    mysql_pass = os.environ['MYSQL_PASS']
+except KeyError:
+    print "Error: please set env mysql_user and mysql_pass."
+    raise
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'HUNTER',
-        'USER':'root',
-        'PASSWORD':'mysql',
+        'USER':mysql_user,
+        'PASSWORD':mysql_pass,
         'HOST':'127.0.0.1',
         'PORT':'3306',
     }
