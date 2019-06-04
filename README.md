@@ -8,7 +8,12 @@
 
 ### 部署步骤
 - 首先下载或者克隆项目（hunter-ht.org或者自行重命名）
-- 将项目文件夹放置于服务器目录下，并进入文件目录（hunter-ht.org/yourfilename）
+- 将项目文件夹放置于服务器目录下，并进入文件目录（hunter-ht.org）
+- 设置环境变量MYSQL_USER和MYSQL_PASS，配置mysql数据库用户名和密码：
+  ```
+  export MYSQL_USER=XXX
+  export MYSQL_PASS=XXX
+  ```
 - 执行如下两条命令，创建数据库
   ```
   python manage.py makemigrations
