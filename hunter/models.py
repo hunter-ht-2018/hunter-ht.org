@@ -9,6 +9,8 @@ class User(models.Model):
     nake_name = models.CharField(max_length=100)
     identity = models.CharField(max_length=1, default='0')
     introduction = models.TextField(default="No Information")
+    score = models.IntegerField(default=0)
+    scoreUsed = models.IntegerField(default=0)
 
 class Publications(models.Model):
     pubID = models.BigIntegerField(primary_key=True)
@@ -35,3 +37,10 @@ class Articles(models.Model):
     publish = models.CharField(max_length=5,default='0')
     editDateTime = models.DateField(default=datetime.datetime.now().date())
     isPrivate=models.CharField(max_length=5,default='0')
+
+class ScoreRecords(models.Model):
+    recordID = models.BigIntegerField(primary_key=True)
+    userID = models.BigIntegerField(default=' ')
+    username = models.CharField(max_length=50,default=' ')
+    reason = models.TextField(default='no reason')
+    editDate = models.DateField(default=datetime.datetime.now().date())

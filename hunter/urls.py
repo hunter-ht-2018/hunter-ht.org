@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^write/$',views.write),
     url(r'^home/view/',views.view),
     url(r'^search/',views.search),
+    url(r'^add_sub_score/',views.add_sub_score),
     url(r'^profile/[a-zA-Z0-9]+.html', views.personal),
     url(r'^home/profile/[a-zA-Z0-9]+.html', views.personal),
     url(r'^edit/[a-zA-Z0-9]+.html', views.editPro),

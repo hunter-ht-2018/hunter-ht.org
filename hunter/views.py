@@ -182,6 +182,10 @@ def admin(request):
                     user.identity = '普通用户'
                 else:
                     user.identity = '管理员'
+            if ScoreRecords.objects.last() is None:
+                records=0;
+            else:
+                records = ScoreRecords.objects.all();
             return render_to_response('admin.html',locals())
 
 def operator(request):
@@ -712,4 +716,53 @@ def editPro(request):
                 response = JsonResponse({"results":e})
                 return response
     return render(request,'editPro.html')
+
+def add_sub_score(request):
+    if request.is_ajax():
+        action = request.POST.get("action")
+        # 加分
+        username = request.POST.get('username')
+        if User.objects.filter(name=username):
+            userID= request.POST.get('userID')
+            user_score = User.objects.get(name=username).score
+            scoreUsed = User.objects.get(name=username).score
+            reason_to_add = request.POST.get("reason")
+            add_num = request.POST.get("score")
+            if action == '1':
+                totalNum =int(user_score)+int(add_num)
+            else:
+                totalNum = int(user_score)-int(add_num)
+                scoreUsed =scoreUsed+int(add_num)
+            if ScoreRecords.objects.last() is None:
+                recordID = 1
+            else:
+                recordID = ScoreRecords.objects.last().recordID+1
+            try:
+                ScoreRecords.objects.create(recordID=recordID,username=username,userID=userID, reason = reason_to_add,editDate=datetime.datetime.now().date())
+            except EOFError as e:
+                response = JsonResponse({"message": e})
+
+            try:
+                User.objects.filter(name=username).update(score=totalNum,scoreUsed = scoreUsed)
+                print "true"
+                response = JsonResponse({"message": "success"})
+                return response
+            except EOFError as e:
+                response = JsonResponse({"message": e})
+                return response
+        else:
+            response = JsonResponse({"message":"用户不存在"})
+    return render(request, 'admin.html')
+
+def getUserScore(request):
+    if request.is_ajax():
+        if User.objects.filter(identity='0'):
+            users = User.objects.filter(identity='0')
+            for user in users:
+                user.curScore = user.score-user.scoreUsed
+            results = serializers.serialize("json", users)
+            return HttpResponse(results)
+        return render(request,'admin.html')
+    return render(request,'admin.html')
+
 

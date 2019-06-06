@@ -27,11 +27,12 @@
             <li id="paperadminLi" onclick="change(this)">论文管理</li>
             <li id="privateArtadminLi" onclick="change(this)">内部文章</li>
             <li id="writenoticeLi"><a href="/write/" target="_blank">发布通知</a></li>
+            <li id="scoreLi" onclick="change(this)">积分管理</li>
         </ul>
     </div>
     <div class="rightCnt">
         <div id="paperadmin" class="userlist" style="display: none;">
-        <table class="table tableList">
+            <table class="table tableList">
 		    	<thead>
 
 		    	</thead>
@@ -55,7 +56,7 @@
                     {%  endfor %}
 		    	</tbody>
 		    </table>
-    </div>
+        </div>
         <div id="useradmin" class="userlist" >
         <div  class="adminForm">
             <div id="adduserform" class="form-horizontal"  >
@@ -113,13 +114,92 @@
                     </li>
                 {% endfor %}
             </ul>
-            <div id="articleView" class="hide">
+            <div id="articleView" class="hide" >
                 <button class="lastStep" onclick="returnToList()"><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1541063213171" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2135" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M939.880137 487.72513l-782.215258 0 358.804922-318.92975c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.505595-42.367947-2.492774L64.602344 490.13911c-6.407943 5.693676-10.073426 13.858636-10.073426 22.430872s3.665483 16.737196 10.073426 22.430872l411.993309 366.204449c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947L169.687704 548.100196 939.880137 548.100196c16.57449 0 30.011524-13.613042 30.011524-30.187533S956.454628 487.72513 939.880137 487.72513z" p-id="2136" fill="#FF9800"></path></svg></button>
                 <div id="artTitle"><h1></h1></div>
                 <div id="authorName"></div>
                 <div id="content"></div>
             </div>
         </div>
+        <div id="scoreRecords" class="userlist" style="display: none;">
+            <div style="width:100%;height:50px;">
+                <span id="user_score_List" style="color:#ff9800" onclick="changeScoreList(this)">积分列表</span>
+                <span id="score_history_List" onclick="changeScoreList(this)">详细记录</span>
+                <button id="editScoreBtn" title="更改积分" onclick="showAddScore()" ><?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1538270903865" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3673" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M607.232 896a32 32 0 1 1 0 64H192a96 96 0 0 1-96-96V160a96 96 0 0 1 96-96h544a96 96 0 0 1 96 96 32 32 0 0 1-64 0 32 32 0 0 0-32-32H192a32 32 0 0 0-32 32v704a32 32 0 0 0 32 32h415.232zM832 585.76v146.656c0 42.656-64 42.656-64 0v-146.656c0-42.688 64-42.688 64 0z" p-id="3674" fill="#000"></path><path d="M288 320a32 32 0 1 1 0-64h224a32 32 0 0 1 0 64H288zM288 480a32 32 0 0 1 0-64h128a32 32 0 0 1 0 64H288zM639.424 926.592a32 32 0 1 1-64 0L576 800a96 96 0 0 1 96-96l127.744 1.152a32 32 0 1 1 0 64L672 768a32 32 0 0 0-32 32l-0.576 126.592z" p-id="3675" fill="#ff9800"></path><path d="M637.92 947.648a32 32 0 1 1-44.32-46.208l180.384-172.992a32 32 0 1 1 44.288 46.176l-180.352 173.024zM880.896 334.528a31.424 31.424 0 0 0 3.328-44.416l-0.416-0.512a32 32 0 0 0-44.896-3.36L408.32 652.288l-15.2 51.84 58.336-4.544 429.44-365.056z m51.616-86.4a95.36 95.36 0 0 1-9.408 134.496l-438.08 372.448a32 32 0 0 1-18.24 7.52l-114.944 8.896a32 32 0 0 1-33.184-40.928l30.944-105.472a32 32 0 0 1 9.984-15.36L797.408 237.504a96 96 0 0 1 134.688 10.112l0.416 0.512z" p-id="3676" fill="#ff9800"></path></svg></button>
+            </div>
+            <div id="addScoreForm" class="form-horizontal" style="display: none" >
+                <div class="form-group" style="margin-left:-150px;">
+                    <select class="select_0">
+                        {%  for user in users  %}
+                        <option value="{{ user.userID }}">{{ user.name }}</option>
+                        {%  endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="width:40%;">
+                    <div>
+                        <input id="reason" name="reason"  class="form-control" type="text" autocomplete="off" placeholder="加积分或抵扣积分理由" required>
+                    </div>
+                </div>
+                <div class="form-group" class = "addScore">
+                    <select class="select_1">
+                        <option value="1" selected>奖励</option>
+                        <option value="0">抵扣</option>
+                    </select>
+                    <button class="addOrsub" onclick="subScoreBtn()">-</button>
+{#                    <div>#}
+                        <input id="scoreValue"  name="scoreValue"  style="width:50px; height: 34px; border:solid 1px #ccc;border-radius: 2px; text-align: center" type="text" autocomplete="off" value="1">
+{#                    </div>#}
+
+                    <button class="addOrsub" onclick="addScoreBtn()">+</button>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <button id="submitScore" class="addScorebtn" onclick="submitScore()" >确定</button>
+                        <p style="color:red">{{ message }}</p>
+                    </div>
+                </div>
+            </div><br>
+            <div  class=" user_score_List">
+                <div class="list_head">
+                    <ul>
+                        <li>姓名</li>
+                        <li>总分</li>
+                        <li>已使用</li>
+                        <li>可用积分</li>
+                    </ul>
+                </div>
+                {%  for user in users  %}
+                    <ul class="list_score_body" id="{{ user.userID }}">
+		    			<li>{{ user.name }}</li>
+                        <li>
+                        	{{ user.score }}
+                        </li>
+                        <li>{{ user.scoreUsed }}</li>
+                        <li></li>
+                        <li style="display: none;">{{ user.identity }}</li>
+                    </ul>
+                {%  endfor %}
+		    </div>
+            <div  class=" score_history_List hide">
+		    	<div class="list_head">
+                    <ul>
+                        <li>姓名</li>
+                        <li>详情</li>
+                        <li>日期</li>
+                    </ul>
+                </div>
+                {%  for record in records  %}
+                    <ul class="list_records_body">
+		    			<li>{{ record.username }}</li>
+                        <li>
+                        	{{ record.reason }}
+                        </li>
+                        <li>{{ record.editDate }}</li>
+                    </ul>
+                {%  endfor %}
+		    </div>
+        </div>
+
     </div>
     <script>
         $(document).ready(function() {
@@ -205,6 +285,19 @@
                 storage.clear();
                 window.location.href = "/signin/";
             }
+            function changeScoreList(thisbtn){
+                var clickedName = $(thisbtn).attr('id');
+                thisbtn.style.color = "#d68206";
+                if(clickedName == 'user_score_List'){
+                    $('.user_score_List').removeClass('hide');
+                    $('.score_history_List').addClass('hide');
+                    $('#score_history_List').css('color','black');
+                }else{
+                    $('.user_score_List').addClass('hide');
+                    $('.score_history_List').removeClass('hide');
+                    $('#user_score_List').css('color','black');
+                }
+            }
 
             function change(thisbtn) {
                 var divname = $(thisbtn).attr('id');
@@ -213,22 +306,53 @@
                     $('#useradmin').css('display', 'block');
                     $('#paperadmin').css('display', 'none');
                     $('#privateArtadmin').css('display','none');
+                    $('#scoreRecords').css('display','none');
                     $('#paperadminLi').css('background-color', 'white');
                     $('#privateArtadminLi').css('background-color', 'white');
+                    $('#scoreLi').css('background-color', 'white');
                 } else if(divname=='paperadminLi') {
                     $('#useradmin').css('display', 'none');
                     $('#paperadmin').css('display', 'block');
                     $('#privateArtadmin').css('display','none');
+                    $('#scoreRecords').css('display','none');
                     $('#useradminLi').css('background-color', 'white');
                     $('#privateArtadminLi').css('background-color', 'white');
+                    $('#scoreLi').css('background-color', 'white');
                 }else if(divname=='privateArtadminLi'){
                     $('#useradmin').css('display', 'none');
                     $('#paperadmin').css('display', 'none');
                     $('#privateArtadmin').css('display','block');
+                    $('#scoreRecords').css('display','none');
                     $('#useradminLi').css('background-color', 'white');
                     $('#paperadminLi').css('background-color', 'white');
+                    $('#scoreLi').css('background-color', 'white');
+                }else if(divname=='scoreLi'){
+                    $('#useradmin').css('display', 'none');
+                    $('#paperadmin').css('display', 'none');
+                    $('#privateArtadmin').css('display','none');
+                    $('#scoreRecords').css('display','block');
+                    $('#useradminLi').css('background-color', 'white');
+                    $('#paperadminLi').css('background-color', 'white');
+                    $('#privateArtadminLi').css('background-color', 'white');
+                    calUserScore();
                 }
             }
+            function calUserScore(){
+                    var current_score_lists = document.getElementsByClassName('list_score_body');
+                    for(var i=0;i<current_score_lists.length;i++){
+                        if('普通用户'==current_score_lists[i].lastElementChild.innerText.toString().trim()){
+                            var current_score_list = current_score_lists[i];
+                            var user_score = parseInt(current_score_list.children[1].innerText);
+                            var user_score_used = parseInt(current_score_list.children[2].innerText);
+                            current_score_list.children[3].innerText = user_score-user_score_used;
+                        }else{
+                            {#current_score_lists[i].innerHTML="";#}
+                            {#current_score_lists[i].className="";#}
+                            current_score_lists[i].style.display='none';
+                        }
+                    }
+            }
+
 
             function delUser(thisbtn) {
                 var delname = thisbtn.parentElement.parentElement.firstElementChild.innerHTML;
@@ -363,6 +487,63 @@
                 });
 
         };
+         function showAddScore(){
+             var addScoreForm = document.getElementById("addScoreForm");
+             addScoreForm.style.display='block';
+         }
+
+         function addScoreBtn(){
+             document.getElementById('scoreValue').value=parseInt(document.getElementById('scoreValue').value)+1;
+         }
+         function subScoreBtn(){
+             document.getElementById('scoreValue').value=parseInt(document.getElementById('scoreValue').value)-1;
+         }
+         function submitScore() {
+             var usernameSel = document.getElementsByClassName("select_0")[0];
+             var index_0 = usernameSel.selectedIndex;
+             var user_name = usernameSel.options[index_0].text;
+             var user_ID = usernameSel.options[index_0].value;
+             var addSel = document.getElementsByClassName("select_1")[0];
+             var index_1 =addSel.selectedIndex;
+             var addOrSub = addSel.options[index_1].value;
+             var reason = document.getElementById("reason").value;
+             if(reason.length===0){
+                 alert("请填写加分或抵扣理由");
+                 return;
+             }
+             var scoreNum = document.getElementById("scoreValue").value;
+             $.ajax({
+                    url: /add_sub_score/,
+                    type: 'post',
+                    data: {
+                        "username": user_name,
+                        "userID": user_ID,
+                        "score":scoreNum,
+                        "reason":reason,
+                        "action":addOrSub,
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        alert(response["message"]);
+                        if (response["message"] === "success") {
+                            var userUl = document.getElementById(user_ID);
+                            if(addOrSub==="1"){
+                                userUl.children[1].innerText=parseInt(userUl.children[1].innerText)+parseInt(scoreNum);
+                                userUl.children[3].innerText=parseInt(userUl.children[3].innerText)+parseInt(scoreNum);
+                            }else{
+                                console.log("减积分")
+                                userUl.children[1].innerText=parseInt(userUl.children[1].innerText)-parseInt(scoreNum);
+                                userUl.children[2].innerText=parseInt(userUl.children[2].innerText)+parseInt(scoreNum);
+                                userUl.children[3].innerText=parseInt(userUl.children[3].innerText)-parseInt(scoreNum);
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Something went wrong....');
+                    }
+                });
+         }
 
     </script>
 

@@ -4,7 +4,7 @@
 }
 .userlist{
     width:100%;
-    margin:100px auto;
+    margin:70px auto;
 }
 button{
     outline:none;
@@ -75,7 +75,7 @@ a:hover{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size:16px;
     border:none;
-    border-radius:5px;
+    border-radius:2px;
     vertical-align: middle;
 }
 .adduserbtn{
@@ -226,3 +226,93 @@ svg{
     margin-top:50px;
     background-color: #eaeaea;
 }
+
+#addScore{
+    width:100%;
+    height:60px;
+    line-height:60px;
+}
+
+#user_score_List,#score_history_List{
+    display: block;
+    height:35px;
+    line-height:35px;
+    font-size: 18px;
+    float: left;
+    margin:10px;
+    cursor: pointer;
+}
+#user_score_List{
+    border-right:solid 3px black;
+    padding-right:20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.user_score_List{
+    margin-left:10px;
+}
+#editScoreBtn{
+    width:30px;
+    height:30px;
+    margin-top: 10px;
+    margin-left: 20px;
+    float:right;
+    margin-right:10%;
+}
+#addScoreForm{
+    width:100%;
+    height:50px;
+    -webkit-transition:all 0.2s ease-in-out;
+	transition:all 0.2s ease-in-out;
+}
+#addScoreForm > .form-group{
+    float:left;
+    margin:10px;
+}
+.select_0{
+    width:150px;
+}
+.select_1{
+    width:60px;
+}
+.select_0,.select_1{
+    height: 34px;
+    background: transparent;
+    border:solid 1px #ccc;
+}
+.addScorebtn{
+    width: 50px;
+    height: 34px;
+    background-color: rgba(0,0,0,0.8);
+    color: #ff9800;
+    border-radius: 2px;
+}
+.list_head,.list_score_body,.list_records_body{
+    width:100%;
+    height:45px;
+    line-height: 45px;
+}
+.user_score_List>.list_head >ul> li,.list_score_body > li{
+    width:25%;
+    float: left;
+}
+.user_score_List,.score_history_List{
+    -webkit-transition:all 0.2s ease-in-out;
+	transition:all 0.2s ease-in-out;
+}
+
+.list_records_body > li,.score_history_List>.list_head>ul>li{
+    width:33%;
+    float: left;
+
+}
+.addOrsub{
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+    line-height: 25px;
+    border: solid 2px #ccc;
+    border-radius: 15px;
+}
+
+
+
