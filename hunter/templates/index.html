@@ -54,6 +54,7 @@
           </div>
         </div>
       </div>
+        <div id="scoreCnt"> 总积分： 已用： 剩余：</div>
     </nav>
     <div id="dialog-face" class="dialog-face hide"></div>
     <div id="modWrapper" style="position:fixed;width:100%;height:100%;z-index:1000;" class="modWrapper hide">
@@ -115,7 +116,7 @@
                       <td class="col-sm-8 col-md-8 col-md-offset-2">
                           <p><a href="../{{ publication.link }}" target="_blank" class="title_a">{{ publication.title }}</a></p>
                           <p>{{ publication.authors }}</p>
-                          <p>{{ publication.journalname }}:{{publication.index}}</p>
+                          <p>{{ publication.journalname }} {{publication.index}}</p>
                       </td>
                       <td class="col-sm-1">
                           <button class="delePubBtn" onclick="delePub(this)">删除</button>
@@ -424,6 +425,10 @@
         function getDataShow() {
             var storage=window.sessionStorage;
             var username=storage.username;
+            var scores = storage.scores;
+            var scoresUsed = storage.scoresUsed;
+            var scoresLast = storage.scoresLast;
+            document.getElementById("scoreCnt").innerHTML = "总积分："+scores.toString()+"&nbsp;&nbsp;&nbsp;已使用："+scoresUsed.toString()+"&nbsp;&nbsp;&nbsp;剩余："+scoresLast.toString();
             $.ajax({
                 url: '/index/',
                 type: 'get',

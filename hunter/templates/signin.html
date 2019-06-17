@@ -57,6 +57,9 @@
                         var storage = window.sessionStorage;
                         storage['username'] = enData["username"];
                         storage['identity'] = msg["identity"];
+                        storage['scores']=msg["scores"];
+                        storage['scoresUsed']=msg["scoresUsed"];
+                        storage['scoresLast']=msg["scoresLast"];
                         if(msg["identity"]=="0"){
                             window.location.href='/index/';
                         }else{

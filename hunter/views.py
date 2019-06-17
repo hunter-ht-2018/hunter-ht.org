@@ -316,7 +316,14 @@ def signin(request):
                 login_state['loginState']='LoginSuccess'
                 login_state['username']=db_info.name
                 identity = db_info.identity;
-                response = JsonResponse({"message": "登录成功","identity":identity})
+                user=User.objects.get(name=username)
+                print "用户"
+                print user
+                scores = int(user.score)
+                print scores
+                scoresUsed = int(user.scoreUsed)
+                scoresLast = scores-scoresUsed
+                response = JsonResponse({"message": "登录成功","identity":identity,"scores":scores,"scoresLast":scoresLast,"scoresUsed":scoresUsed})
                 return response
                 # return render(request, 'index.html', {'username': username})
             else:
