@@ -732,7 +732,7 @@ def add_sub_score(request):
         if User.objects.filter(name=username):
             userID= request.POST.get('userID')
             user_score = User.objects.get(name=username).score
-            scoreUsed = User.objects.get(name=username).score
+            scoreUsed = User.objects.get(name=username).scoreUsed
             reason_to_add = request.POST.get("reason")
             add_num = request.POST.get("score")
             print action
@@ -741,7 +741,7 @@ def add_sub_score(request):
                 totalNum =int(user_score)+int(add_num)
                 print "hihiiii"
             if action == '0':
-                # totalNum = int(user_score)-int(add_num)
+                totalNum = int(user_score)
                 scoreUsed =scoreUsed+int(add_num)
             if ScoreRecords.objects.last() is None:
                 recordID = 1
